@@ -478,7 +478,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Statistiken
+  m_Text: Erfolge
 --- !u!222 &214952181
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -815,7 +815,7 @@ GameObject:
   - component: {fileID: 408797214}
   - component: {fileID: 408797213}
   m_Layer: 5
-  m_Name: 'Statistics Menu Button '
+  m_Name: 'Trophies Menu Button '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1355,8 +1355,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -91.399994, y: 0}
-  m_SizeDelta: {x: 61.56, y: 61.56}
+  m_AnchoredPosition: {x: -91.399994, y: 0.0000076293945}
+  m_SizeDelta: {x: 61.56, y: 60.09}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &801894231
 MonoBehaviour:
@@ -1514,8 +1514,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -91.39995, y: 0}
-  m_SizeDelta: {x: -228.44, y: -16.439999}
+  m_AnchoredPosition: {x: -91.39993, y: 0.000015258789}
+  m_SizeDelta: {x: -228.44, y: -35.41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &908513671
 MonoBehaviour:
@@ -2672,7 +2672,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -91.39996, y: 0}
-  m_SizeDelta: {x: 61.56, y: 61.56}
+  m_SizeDelta: {x: 61.56, y: 54.103}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1503999749
 MonoBehaviour:
@@ -3049,7 +3049,7 @@ MonoBehaviour:
   loadSavegameMenuButton: {fileID: 312769785}
   loadSettingsMenuButton: {fileID: 1015466871}
   loadHelpMenuButton: {fileID: 441002748}
-  loadStatisticsMenuButton: {fileID: 408797213}
+  loadTrphiesMenuButton: {fileID: 408797213}
   mainMenuPanel: {fileID: 972029486}
   popupPanel: {fileID: 1554251625}
 --- !u!4 &1800325593

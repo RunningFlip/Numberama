@@ -14,7 +14,7 @@ public class MainMenuController : MonoBehaviour
     public Button loadSavegameMenuButton;
     public Button loadSettingsMenuButton;
     public Button loadHelpMenuButton;
-    public Button loadStatisticsMenuButton;
+    public Button loadTrphiesMenuButton;
 
     [Header("Panel")]
     public GameObject mainMenuPanel;
@@ -35,7 +35,7 @@ public class MainMenuController : MonoBehaviour
         loadSavegameMenuButton.onClick.AddListener(     delegate { SceneManager.LoadScene("SavegameMenuScene"); });
         loadSettingsMenuButton.onClick.AddListener(     delegate { SceneManager.LoadScene("SettingsScene");     });
         loadHelpMenuButton.onClick.AddListener(         delegate { SceneManager.LoadScene("HelpScene");         });
-        loadStatisticsMenuButton.onClick.AddListener(   delegate { SceneManager.LoadScene("StatisticsScene");   });
+        loadTrphiesMenuButton.onClick.AddListener(      delegate { SceneManager.LoadScene("TrophiesScene");      });
 
         //DEBUG - resets the savegames
         //DataHelper.DeleteAllSavegames();
