@@ -10,7 +10,6 @@ public class SettingsController : MonoBehaviour
 
     [Header("Toggle")]
     public Toggle soundEffectsToggle;
-    public Toggle autoLineDeletingToggle;
     public Toggle hintsToggle;
     public Toggle backtrackToggle;
     [Space]
@@ -24,7 +23,6 @@ public class SettingsController : MonoBehaviour
 
         //Toggle
         soundEffectsToggle.onValueChanged.AddListener(      delegate { ToggleSoundEffects();        });
-        autoLineDeletingToggle.onValueChanged.AddListener(  delegate { ToggleAutoLineDeleting();    });
         hintsToggle.onValueChanged.AddListener(             delegate { ToggleHints();               });
         backtrackToggle.onValueChanged.AddListener(         delegate { Togglebacktracking();        });
         darkModeToggle.onValueChanged.AddListener(          delegate { ToggleDarkMode();            });
@@ -38,7 +36,6 @@ public class SettingsController : MonoBehaviour
     {
         //Toggle UI
         soundEffectsToggle.isOn         = PlayerPrefs.GetInt("soundEffectsEnabled") == 1;
-        autoLineDeletingToggle.isOn     = PlayerPrefs.GetInt("autoLineDeletingEnabled") == 1;
         hintsToggle.isOn                = PlayerPrefs.GetInt("hintsEnabled") == 1;
         backtrackToggle.isOn            = PlayerPrefs.GetInt("backtrackingEnabled") == 1;
         darkModeToggle.isOn             = PlayerPrefs.GetInt("darkmodeEnabled") == 1;
@@ -51,16 +48,6 @@ public class SettingsController : MonoBehaviour
     private void ToggleSoundEffects()
     {
         PlayerPrefs.SetInt("soundEffectsEnabled", soundEffectsToggle.isOn ? 1 : 0);
-        PlayerPrefs.Save();
-    }
-
-
-    /// <summary>
-    /// Enables or disables the auto-line-deleting function.
-    /// </summary>
-    private void ToggleAutoLineDeleting()
-    {
-        PlayerPrefs.SetInt("autoLineDeletingEnabled", autoLineDeletingToggle.isOn ? 1 : 0);
         PlayerPrefs.Save();
     }
 

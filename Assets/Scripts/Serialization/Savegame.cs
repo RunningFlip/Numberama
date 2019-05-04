@@ -10,6 +10,9 @@ public class Savegame
     public int index;
     public string jsonTimestamp;
 
+    //Timer
+    public float passedTime;
+
     //Stats
     public int pairsFound;
     public int undoCount;
@@ -27,10 +30,13 @@ public class Savegame
     public SerializedSprite jsonSprite;
 
 
-    public Savegame(List<SerializableNumberField> _serializedNumberFields, List<int> _strikedLines, BackLog _backLog, int _pairsFound, int _undos)
+    public Savegame(List<SerializableNumberField> _serializedNumberFields, List<int> _strikedLines, float _passedTime, BackLog _backLog, int _pairsFound, int _undos)
     {
         //Timestamp
         jsonTimestamp = JsonUtility.ToJson((JsonDateTime) DateTime.Now);
+
+        //Timer
+        passedTime = _passedTime;
 
         //Countings
         pairsFound = _pairsFound;

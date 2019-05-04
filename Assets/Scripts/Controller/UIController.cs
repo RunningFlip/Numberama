@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,10 +14,10 @@ public class UIController : MonoBehaviour
     public Button moreFieldsButton;
     public Button undoStrikeButton;
     public Button redoStrikeButton;
-    public Button deleteStrikedLinesButton;
     public Button menuButton;
 
     [Header("Labels")]
+    public Text timerLabel;
     public Text pairValueText;
     public Text undoCountText;
 
@@ -31,12 +32,12 @@ public class UIController : MonoBehaviour
         undoStrikeButton.onClick.AddListener(           delegate { GameplayController.Instance.UndoLastAction();        });
         //redoStrikeButton.onClick.AddListener(           delegate { GameplayController.Instance.RedoLastAction();        });
         menuButton.onClick.AddListener(                 delegate { StartCoroutine(BackToGameMenu());                    });
+    }
 
-        //Optional UI
-        if (PlayerPrefs.GetInt("autoLineDeletingEnabled") == 0)
-        {
-            ActivateManuallyLineDeleting();
-        }
+
+    private void Update()
+    {
+        UpdateTimer();
     }
 
 
@@ -58,20 +59,6 @@ public class UIController : MonoBehaviour
 
         //Load game menu
         SceneManager.LoadScene("SavegameMenuScene");   
-    }
-
-
-    /// <summary>
-    /// Activates a button to delete striked lines manually.
-    /// </summary>
-    private void ActivateManuallyLineDeleting()
-    {
-        deleteStrikedLinesButton.gameObject.SetActive(true);
-
-        deleteStrikedLinesButton.onClick.AddListener(delegate
-        {
-            GameplayController.Instance.DeleteAllStrikedLinesManually();
-        });
     }
 
 
@@ -98,5 +85,16 @@ public class UIController : MonoBehaviour
         {
             undoCountText.text = _undoCount.ToString();
         }
+    }
+
+
+    /// <summary>
+    /// Starts the timer and disblays it in the UI.
+    /// </summary>
+    private void UpdateTimer()
+    {
+        TimeSpan timeSpan = TimeSpan.FromSeconds(GameplayController.Instance.passedTime);
+
+        timerLabel.text = string.Format("{0:D2}:{1:D2}:{2:D2}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
     }
 }

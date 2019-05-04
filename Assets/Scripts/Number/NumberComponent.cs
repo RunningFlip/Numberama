@@ -119,6 +119,8 @@ public class NumberComponent : MonoBehaviour
         if (!selected)
         {
             backgroundImage.sprite = selectedSprite;
+            numberLabel.color = alternativeTextColor;
+
             selected = true;
 
             GameplayController.Instance.FieldSelected(this, true);

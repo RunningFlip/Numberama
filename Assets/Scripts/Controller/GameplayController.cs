@@ -17,7 +17,8 @@ public class GameplayController : MonoBehaviour
 
     [Header("Field Spawn")]
     public Transform spawnParent;
-    public GameObject numberFieldPrefab;
+    public GameObject numberFieldPrefab_Left;
+    public GameObject numberFieldPrefab_Right;
 
     [Header("Field Selection")]
     public NumberComponent fieldSelectionA;
@@ -25,9 +26,12 @@ public class GameplayController : MonoBehaviour
 
 
     //Flag
+    private bool right;
     private bool started;
     private bool isDirty;
-    private bool autoLineDeleting;
+
+    //Time
+    public float passedTime;
 
     //Configs
     private NumberPatternConfig patternConfig;
@@ -64,9 +68,6 @@ public class GameplayController : MonoBehaviour
 
     private void Start()
     {
-        //PlayerPrefs
-        autoLineDeleting = PlayerPrefs.GetInt("autoLineDeletingEnabled") == 1;
-
         //Lists
         numberFieldComponents = new List<List<NumberComponent>>();
         numberFieldComponents.Add(new List<NumberComponent>());
@@ -102,6 +103,12 @@ public class GameplayController : MonoBehaviour
     }
 
 
+    private void LateUpdate()
+    {
+        passedTime += Time.deltaTime;
+    }
+
+
     /// <summary>
     /// Spawns more numberfields and adds them to the game field.
     /// </summary>
@@ -109,7 +116,12 @@ public class GameplayController : MonoBehaviour
     private NumberComponent SpawnNextNumberField(int _x, int _y)
     {
         //Spawn
-        GameObject numField = Instantiate(numberFieldPrefab, Vector3.zero, Quaternion.identity, spawnParent);
+        GameObject prefab = right 
+            ? numberFieldPrefab_Left 
+            : numberFieldPrefab_Right;
+        right = !right;
+
+        GameObject numField = Instantiate(prefab, Vector3.zero, Quaternion.identity, spawnParent);
         numField.name += " (" + _x + "/" + _y + ")";
         numField.SetActive(false);
         numberFieldsCount++;
@@ -128,6 +140,7 @@ public class GameplayController : MonoBehaviour
             //Counting
             strikedPairs = _savegame.pairsFound;
             undoCount = _savegame.undoCount;
+            passedTime = _savegame.passedTime;
 
             //UI
             uiController.SetStrikedPairsCount(strikedPairs);
@@ -410,7 +423,7 @@ public class GameplayController : MonoBehaviour
         bool strikeA = false;
         bool strikeB = false;
 
-        if (autoLineDeleting) CheckStrikedLine(lastYA, lastYB, out strikeA, out strikeB);
+        CheckStrikedLine(lastYA, lastYB, out strikeA, out strikeB);
 
         if (strikeA || strikeB)
         {
@@ -439,34 +452,6 @@ public class GameplayController : MonoBehaviour
         //Update Strikes pairs in the UI
         strikedPairs++;
         uiController.SetStrikedPairsCount(strikedPairs);
-    }
-
-
-    /// <summary>
-    /// Deletes all striked lines manually.
-    /// </summary>
-    public void DeleteAllStrikedLinesManually()
-    {
-        for (int i = 0; i < numberFieldComponents.Count; i++)
-        {
-            bool strikedLine = true;
-            List<NumberComponent> line = numberFieldComponents[i];
-
-            for (int j = 0; j < line.Count; j++)
-            {
-                if (!line[j].strike)
-                {
-                    strikedLine = false;
-                    break;
-                }
-            }
-
-            if (strikedLine)
-            {
-                backLog.AddToBackLog(null, null, i, -1);
-                SetLineStatus(i, false);
-            }
-        }
     }
 
 
@@ -597,7 +582,7 @@ public class GameplayController : MonoBehaviour
         }
 
         //savegame
-        return new Savegame(numberFields, strikedLines, backLog, strikedPairs, undoCount);
+        return new Savegame(numberFields, strikedLines, passedTime, backLog, strikedPairs, undoCount);
     }
 
 

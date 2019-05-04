@@ -297,7 +297,7 @@ MonoBehaviour:
   selectedSprite: {fileID: 21300000, guid: 4e424a364b6015b4d8f838b4c5b1632f, type: 3}
   hintSprite: {fileID: 21300000, guid: 189abaab266f7e649abed062076fb97c, type: 3}
   strikedSprite: {fileID: 21300000, guid: 94ed3681aa4287e46b96566e19594cd0, type: 3}
-  alternativeTextColor: {r: 1, g: 1, b: 1, a: 0}
+  alternativeTextColor: {r: 1, g: 1, b: 1, a: 1}
   strikedTextColor: {r: 1, g: 1, b: 1, a: 0.101960786}
   id: 0
 --- !u!114 &7688548789323105185
