@@ -14,9 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxLineLength: 9
   maxBackTracking: 10
-  useDefault: 1
   defaultNumberPatternConfig: {fileID: 11400000, guid: a698a1127da4b89479c4acea158764ee,
     type: 2}
-  numberPatternConfigs:
-  - {fileID: 11400000, guid: a698a1127da4b89479c4acea158764ee, type: 2}
-  - {fileID: 11400000, guid: 8faad2da1a5b525409a9566b39d9f94d, type: 2}
+  hardNumberPatternConfig: {fileID: 11400000, guid: 8faad2da1a5b525409a9566b39d9f94d,
+    type: 2}

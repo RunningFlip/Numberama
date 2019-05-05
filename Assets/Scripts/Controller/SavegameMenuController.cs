@@ -8,7 +8,6 @@ public class SavegameMenuController : MonoBehaviour
 {
     [Header("Buttons")]
     public Button loadMainMenuButton;
-    public Button newGameButton;
     public Button editSavegamesButton;
 
     [Header("Savegame Parent")]
@@ -20,7 +19,6 @@ public class SavegameMenuController : MonoBehaviour
     private bool inEditing;
 
     //Savegames
-    private int maxSavegames = 10;
     private List<SavegameInformation> existingSavegameIndices;
     private List<SavegameButton> savegameButtons;
 
@@ -29,12 +27,11 @@ public class SavegameMenuController : MonoBehaviour
     {
         //Buttons
         loadMainMenuButton.onClick.AddListener(     delegate { SceneManager.LoadScene("MainMenuScene"); });
-        newGameButton.onClick.AddListener(          delegate { LoadGame();                              });
         editSavegamesButton.onClick.AddListener(    delegate { ToggleEditing();                         });
 
         //Savegames
         savegameButtons = new List<SavegameButton>();
-        existingSavegameIndices = DataHelper.GetSavegameIndices(maxSavegames);
+        existingSavegameIndices = DataHelper.GetSavegameInformations();
         SetupButtons();
     }
 
@@ -45,11 +42,6 @@ public class SavegameMenuController : MonoBehaviour
     /// <param name="_status"></param>
     private void SetupButtons()
     {
-        if (existingSavegameIndices.Count == maxSavegames)
-        {
-            newGameButton.gameObject.SetActive(false);
-        }
-
         for (int i = 0; i < existingSavegameIndices.Count; i++)
         {
             AddSavegameButton(existingSavegameIndices[i]);
@@ -61,30 +53,12 @@ public class SavegameMenuController : MonoBehaviour
     /// Loads the game scene with/without savegame.
     /// </summary>
     /// <param name="_savegame"></param>
-    private void LoadGame(int _savegame = -1)
+    private void LoadGame(SavegameInformation _savegameInformation)
     {
-        int savegame = _savegame;
+        PlayerPrefs.SetInt("SavegameTimestamp", _savegameInformation.timestamp);
+        PlayerPrefs.SetString("SavegameName", _savegameInformation.gameName);
+        PlayerPrefs.SetInt("SavegameMode", _savegameInformation.gameMode);
 
-        if (_savegame == -1)
-        {
-            List<int> indices = new List<int>();
-
-            for (int i = 0; i < existingSavegameIndices.Count; i++)
-            {
-                indices.Add(existingSavegameIndices[i].index);
-            }           
-
-            for (int i = 0; i < maxSavegames; i++)
-            {
-                if (!indices.Contains(i))
-                {
-                    existingSavegameIndices.Add(new SavegameInformation(i));
-                    savegame = i;
-                    break;
-                }
-            }
-        }
-        PlayerPrefs.SetInt("SavegameIndex", savegame);
         SceneManager.LoadScene("MainGameScene");
     }
 
@@ -93,15 +67,15 @@ public class SavegameMenuController : MonoBehaviour
     /// Adds a savegamebutton on a given index.
     /// </summary>
     /// <param name="_index"></param>
-    public void AddSavegameButton(SavegameInformation _savegameIndex)
+    public void AddSavegameButton(SavegameInformation _savgameInformation)
     {
         GameObject buttonObject = Instantiate(savegameButtonPrefab, Vector3.zero, Quaternion.identity, savegameParent);
 
         SavegameButton savegameButton = buttonObject.GetComponent<SavegameButton>();       
-        savegameButton.SetSavegameIndex(_savegameIndex);            //error might be here?! switch with next line!
-        savegameButton.ButtonSetup(_savegameIndex.jsonTimestamp);   // <---
+        savegameButton.SetSavegameInformation(_savgameInformation); 
+        savegameButton.ButtonSetup(_savgameInformation.gameName, _savgameInformation.gameMode); 
 
-        savegameButton.button.onClick.AddListener(delegate { LoadGame(_savegameIndex.index); });
+        savegameButton.button.onClick.AddListener(delegate { LoadGame(_savgameInformation); });
 
         savegameButtons.Add(savegameButton);
     }
@@ -110,25 +84,21 @@ public class SavegameMenuController : MonoBehaviour
     /// <summary>
     /// Removes a savegamebutton on a given index.
     /// </summary>
-    /// <param name="_index"></param>
-    public void TryToDeleteSavegame(int _index)
+    /// <param name="_timestamp"></param>
+    public void TryToDeleteSavegame(int _timestamp)
     {
         for (int i = 0; i < savegameButtons.Count; i++)
         {
-            if (savegameButtons[i].GetSavegameIndex().index == _index)
+            if (savegameButtons[i].GetSavegameInformation().timestamp == _timestamp)
             {
                 SavegameButton sgButton = savegameButtons[i];
-                DataHelper.DeleteSavegame(sgButton.GetSavegameIndex().index);
+                DataHelper.DeleteSavegame(sgButton.GetSavegameInformation().timestamp);
 
-                existingSavegameIndices.Remove(sgButton.GetSavegameIndex());
+                existingSavegameIndices.Remove(sgButton.GetSavegameInformation());
                 savegameButtons.Remove(sgButton);  
 
                 Destroy(sgButton.gameObject);
 
-                if (savegameButtons.Count < maxSavegames)
-                {
-                    newGameButton.gameObject.SetActive(true);
-                }
                 if (savegameButtons.Count == 0)
                 {
                     ToggleEditing();
@@ -145,17 +115,16 @@ public class SavegameMenuController : MonoBehaviour
     private void ToggleEditing()
     {
         inEditing = !inEditing;
-        newGameButton.interactable = !inEditing;
 
         if (inEditing)
         {
             for (int i = 0; i < savegameButtons.Count; i++)
             {
-                int index = savegameButtons[i].GetSavegameIndex().index;
+                int timestamp = savegameButtons[i].GetSavegameInformation().timestamp;
 
                 SavegameButton savegameButton = savegameButtons[i];
                 savegameButton.button.onClick.RemoveAllListeners();
-                savegameButton.button.onClick.AddListener(delegate { TryToDeleteSavegame(index); });
+                savegameButton.button.onClick.AddListener(delegate { TryToDeleteSavegame(timestamp); });
 
                 savegameButton.ToggleEditMode();
             }
@@ -164,11 +133,11 @@ public class SavegameMenuController : MonoBehaviour
         {
             for (int i = 0; i < savegameButtons.Count; i++)
             {
-                int index = savegameButtons[i].GetSavegameIndex().index;
+                SavegameInformation savegameInformation = savegameButtons[i].GetSavegameInformation();
 
                 SavegameButton savegameButton = savegameButtons[i];
                 savegameButton.button.onClick.RemoveAllListeners();
-                savegameButton.button.onClick.AddListener(delegate { LoadGame(index); });
+                savegameButton.button.onClick.AddListener(delegate { LoadGame(savegameInformation); });
 
                 savegameButton.ToggleEditMode();
             }

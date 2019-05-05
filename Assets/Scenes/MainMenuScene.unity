@@ -359,13 +359,7 @@ MonoBehaviour:
   m_ItemImage: {fileID: 0}
   m_Value: 0
   m_Options:
-    m_Options:
-    - m_Text: Option A
-      m_Image: {fileID: 0}
-    - m_Text: Option B
-      m_Image: {fileID: 0}
-    - m_Text: Option C
-      m_Image: {fileID: 0}
+    m_Options: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3044,14 +3038,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showPopupButton: {fileID: 2085340343}
-  closePopupButton: {fileID: 406162733}
-  startNewGameButton: {fileID: 739592441}
   loadSavegameMenuButton: {fileID: 312769785}
   loadSettingsMenuButton: {fileID: 1015466871}
   loadHelpMenuButton: {fileID: 441002748}
   loadTrphiesMenuButton: {fileID: 408797213}
   mainMenuPanel: {fileID: 972029486}
   popupPanel: {fileID: 1554251625}
+  startNewGameButton: {fileID: 739592441}
+  closePopupButton: {fileID: 406162733}
+  gameNameInputField: {fileID: 1084177210}
+  gameModeDropDown: {fileID: 180517836}
 --- !u!4 &1800325593
 Transform:
   m_ObjectHideFlags: 0

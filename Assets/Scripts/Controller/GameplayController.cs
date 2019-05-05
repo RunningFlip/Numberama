@@ -44,7 +44,7 @@ public class GameplayController : MonoBehaviour
     private int numberFieldsCount = 1;
 
     //Backlog
-    public BackLog backLog;
+    private BackLog backLog;
 
     //Striked lines
     private List<int> strikedLines;
@@ -77,26 +77,25 @@ public class GameplayController : MonoBehaviour
         uiController.SetStrikedPairsCount(strikedPairs);
         uiController.SetUndoCount(undoCount);
 
+        //PlayerPrefs
+        int gameMode = PlayerPrefs.GetInt("SavegameMode");
+        int savegameTimestamp = PlayerPrefs.GetInt("SavegameTimestamp");
+
         //Game Parameter
-        if (PlayerPrefs.GetInt("Hardmode") == 1)
-        {
-            patternConfig = GameParameter.hardNumberPatternConfig;
-        }
-        else
-        {
-            patternConfig = GameParameter.defaultNumberPatternConfig;
-        }
+        if (gameMode == 0)      patternConfig = GameParameter.defaultNumberPatternConfig;
+        else if (gameMode == 1) patternConfig = GameParameter.hardNumberPatternConfig;
 
-        //Try find savegame to load
-        Savegame savegame = DataHelper.LoadProgress(PlayerPrefs.GetInt("SavegameIndex"));
-
-        if (savegame != null)
-        {
+        //Savegames
+        if (savegameTimestamp != -1)
+        {   
+            //Loads a savegame
+            Savegame savegame = DataHelper.LoadProgress(savegameTimestamp);
             LoadGameBySavgame(savegame);
             backLog = new BackLog(savegame.serializedBackLog);
         }
         else
         {
+            //Creates a new game
             AddNumberFields(patternConfig.numberStartPattern);
             backLog = new BackLog();
         }
@@ -581,8 +580,11 @@ public class GameplayController : MonoBehaviour
             }
         }
 
+        string gameName = PlayerPrefs.GetString("SavegameName");
+        int gameMode = PlayerPrefs.GetInt("SavegameMode");
+
         //savegame
-        return new Savegame(numberFields, strikedLines, passedTime, backLog, strikedPairs, undoCount);
+        return new Savegame(numberFields, strikedLines, gameName, gameMode, passedTime, backLog, strikedPairs, undoCount);
     }
 
 
@@ -592,15 +594,6 @@ public class GameplayController : MonoBehaviour
     public void UndoLastAction()
     {
         backLog.UndoLastAction();
-    }
-
-
-    /// <summary>
-    /// Redos the last action in the backlog.
-    /// </summary>
-    public void RedoLastAction()
-    {
-        backLog.RedoLastAction();
     }
 
 

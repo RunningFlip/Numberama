@@ -1,14 +1,10 @@
 ﻿using System.Collections.Generic;
-using System;
-using UnityEngine;
 
 
-[Serializable]
 public class BackLog
 {
-    public int currentPosition = -1;
-    public int maxBackLogLength;
-    public List<BackLogObject> backLogList;
+    private int maxBackLogLength;
+    private List<BackLogObject> backLogList;
 
 
     public BackLog(SerializedBackLog _serializedBackLog = null)
@@ -17,7 +13,6 @@ public class BackLog
 
         if (_serializedBackLog != null)
         {
-            currentPosition = _serializedBackLog.GetCurrentPosition();
             maxBackLogLength = _serializedBackLog.GetMaxBackLogLength();
             ReconnectBacklog(_serializedBackLog.GetSerializedBackLogList());
         }
@@ -35,15 +30,6 @@ public class BackLog
     public int GetMaxBackLogLength()
     {
         return maxBackLogLength;
-    }
-
-    /// <summary>
-    /// Returns the current position.
-    /// </summary>
-    /// <returns></returns>
-    public int GetCurrentPosition()
-    {
-        return currentPosition;
     }
 
 
@@ -103,7 +89,6 @@ public class BackLog
         for (int i = 0; i < _addedNumbersList.Count; i++)
         {         
             SerializableNumberField n = _addedNumbersList[i];
-            Debug.Log(n.x + " / " + n.y);
             addedNumbers.Add(GameplayController.Instance.GetNumberComponent(n.x, n.y));
         }
         return addedNumbers;
@@ -127,12 +112,6 @@ public class BackLog
             backLogList.RemoveAt(0);
             backLogList.Add(backLogObject);
         }
-
-        //Position in backlog
-        currentPosition++;
-
-        //Clamp
-        ClampBacklog();
     }
 
 
@@ -159,32 +138,6 @@ public class BackLog
             backLogList.RemoveAt(0);
             backLogList.Add(backLogObject);
         }
-
-        //Position in backlog
-        currentPosition++;
-
-        //Clamp
-        ClampBacklog();
-    }
-
-
-    /// <summary>
-    /// Clamps the backlog.
-    /// </summary>
-    private void ClampBacklog()
-    {
-        int count = backLogList.Count;
-
-        if (currentPosition < count - 1)
-        {
-            int elementsToClamp = (count - 1) - currentPosition;
-
-            if (elementsToClamp > 0)
-            {
-                backLogList.RemoveRange(currentPosition, elementsToClamp);
-                currentPosition = backLogList.Count - 1;
-            }
-        }
     }
 
 
@@ -193,13 +146,15 @@ public class BackLog
     /// </summary>
     public void UndoLastAction()
     {
-        if (backLogList.Count > 0 && currentPosition > -1)
+        int count = backLogList.Count;
+
+        if (count > 0)
         {
-            //BackLogObject backLogObject = backLogList[count - 1];
-            BackLogObject backLogObject = backLogList[currentPosition];
+            BackLogObject backLogObject = backLogList[count - 1];
 
             //Undo
             backLogObject.UndoAction();
+            backLogList.RemoveAt(count - 1);
 
             //Update strikes pairs in the UI
             if (backLogObject.GetBackLogType() != BackLogType.BackLog_MoreNumbers)
@@ -209,37 +164,6 @@ public class BackLog
 
             //Updates the undo count in the UI
             GameplayController.Instance.IncreaseUndoByInt(1);
-
-            if (currentPosition > -1)
-            {
-                currentPosition--;
-            }
-        }
-    }
-
-
-    /// <summary>
-    /// Redos the last action that is in backlog..
-    /// </summary>
-    public void RedoLastAction()
-    {
-        if (currentPosition < backLogList.Count - 1)
-        {
-            currentPosition++;
-
-            BackLogObject backLogObject = backLogList[currentPosition];
-
-            //Redo
-            backLogObject.RedoAction();
-
-            //Update strikes pairs in the UI
-            if (backLogObject.GetBackLogType() != BackLogType.BackLog_MoreNumbers)
-            {
-                GameplayController.Instance.IncreasePairByInt(1);
-            }
-
-            //Updates the undo count in the UI
-            GameplayController.Instance.IncreaseUndoByInt(-1);
         }
     }
 }

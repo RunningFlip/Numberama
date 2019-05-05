@@ -7,8 +7,11 @@ using UnityEngine;
 public class Savegame
 {
     //Timestamp
-    public int index;
-    public string jsonTimestamp;
+    public int timestamp;
+
+    //Settings
+    public string gameName;
+    public int gameMode;
 
     //Timer
     public float passedTime;
@@ -30,10 +33,18 @@ public class Savegame
     public SerializedSprite jsonSprite;
 
 
-    public Savegame(List<SerializableNumberField> _serializedNumberFields, List<int> _strikedLines, float _passedTime, BackLog _backLog, int _pairsFound, int _undos)
+    public Savegame(List<SerializableNumberField> _serializedNumberFields, List<int> _strikedLines, string _gameName, int _gameMode, float _passedTime, BackLog _backLog, int _pairsFound, int _undos)
     {
+        //Delete old savegame
+        DataHelper.DeleteSavegame(PlayerPrefs.GetInt("SavegameTimestamp"));
+
         //Timestamp
-        jsonTimestamp = JsonUtility.ToJson((JsonDateTime) DateTime.Now);
+        DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
+        timestamp = (int)(DateTime.UtcNow - epochStart).TotalSeconds;
+
+        //Settings
+        gameName = _gameName;
+        gameMode = _gameMode;
 
         //Timer
         passedTime = _passedTime;
@@ -48,7 +59,7 @@ public class Savegame
         serializedBackLog = new SerializedBackLog(_backLog);
 
         //Screenshot
-        TakeScreenshot();
+        //TakeScreenshot();
     }
 
 

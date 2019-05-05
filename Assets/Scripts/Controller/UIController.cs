@@ -13,7 +13,6 @@ public class UIController : MonoBehaviour
     [Header("Buttons")]
     public Button moreFieldsButton;
     public Button undoStrikeButton;
-    public Button redoStrikeButton;
     public Button menuButton;
 
     [Header("Labels")]
@@ -30,7 +29,6 @@ public class UIController : MonoBehaviour
         //Listeners
         moreFieldsButton.onClick.AddListener(           delegate { GameplayController.Instance.TrySpawnMoreNumbers();   });
         undoStrikeButton.onClick.AddListener(           delegate { GameplayController.Instance.UndoLastAction();        });
-        //redoStrikeButton.onClick.AddListener(           delegate { GameplayController.Instance.RedoLastAction();        });
         menuButton.onClick.AddListener(                 delegate { StartCoroutine(BackToGameMenu());                    });
     }
 
@@ -50,11 +48,10 @@ public class UIController : MonoBehaviour
         menuButton.onClick.RemoveListener(delegate { StartCoroutine(BackToGameMenu()); });
 
         //Save game
-        int index = PlayerPrefs.GetInt("SavegameIndex");
-        if (GameplayController.Instance.IsDirty() && index > -1)
+        if (GameplayController.Instance.IsDirty())
         {
             yield return new WaitForEndOfFrame();
-            DataHelper.SaveProgress(index);
+            DataHelper.SaveProgress();
         }
 
         //Load game menu

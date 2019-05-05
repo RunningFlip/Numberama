@@ -6,16 +6,13 @@ using UnityEngine;
 [Serializable]
 public class SerializedBackLog
 {
-    [SerializeField] private int currentPosition;
     [SerializeField] private int maxBackLogLength;
     [SerializeField] private List<SerializedBackLogObject> backLogList;
 
 
     public SerializedBackLog(BackLog _backLog)
     {
-        currentPosition = _backLog.GetCurrentPosition();
         maxBackLogLength = _backLog.GetMaxBackLogLength();
-
         CreateBackLogList(_backLog.GetBackLogList());
     }
 
@@ -53,16 +50,6 @@ public class SerializedBackLog
     public int GetMaxBackLogLength()
     {
         return maxBackLogLength;
-    }
-
-
-    /// <summary>
-    /// Returns the current position in the backlog that is stored.
-    /// </summary>
-    /// <returns></returns>
-    public int GetCurrentPosition()
-    {
-        return currentPosition;
     }
 
 

@@ -10,13 +10,12 @@ public static class DataHelper
     /// Saves the progress from the current game on the given savegame-index.
     /// </summary>
     /// <param name="_savegameIndex"></param>
-    public static void SaveProgress(int _savegameIndex)
+    public static void SaveProgress()
     {
         Savegame savegame = GameplayController.Instance.GetSavegame();
-        savegame.index = _savegameIndex;
 
         string jsonString = JsonUtility.ToJson(savegame);
-        string dataPath = Path.Combine(Application.persistentDataPath, "Savegame_" + _savegameIndex + ".txt");
+        string dataPath = Path.Combine(Application.persistentDataPath, "Savegame_" + savegame.timestamp + ".txt");
 
         using (StreamWriter streamWriter = File.CreateText(dataPath))
         {
@@ -30,11 +29,10 @@ public static class DataHelper
     /// </summary>
     /// <param name="_savegameIndex"></param>
     /// <returns></returns>
-    public static Savegame LoadProgress(int _savegameIndex)
+    public static Savegame LoadProgress(int _savegameTimestamp)
     {
         Savegame loadedSavegame = null;
-
-        string dataPath = Path.Combine(Application.persistentDataPath, "Savegame_" + _savegameIndex + ".txt");
+        string dataPath = Path.Combine(Application.persistentDataPath, "Savegame_" + _savegameTimestamp + ".txt");
 
         if (File.Exists(dataPath))
         {
@@ -51,10 +49,10 @@ public static class DataHelper
     /// <summary>
     /// Delete the savegame on the given savegame-index.
     /// </summary>
-    /// <param name="_savegameIndex"></param>
-    public static void DeleteSavegame(int _savegameIndex)
+    /// <param name="_savegameTimestamp"></param>
+    public static void DeleteSavegame(int _savegameTimestamp)
     {
-        string dataPath = Path.Combine(Application.persistentDataPath, "Savegame_" + _savegameIndex + ".txt"); ;
+        string dataPath = Path.Combine(Application.persistentDataPath, "Savegame_" + _savegameTimestamp + ".txt"); ;
 
         if (File.Exists(dataPath))
         {
@@ -64,69 +62,51 @@ public static class DataHelper
 
 
     /// <summary>
-    /// Looks for a savegame with a given index, if found, it returns true.
-    /// </summary>
-    /// <param name="_savegameIndex"></param>
-    /// <returns></returns>
-    public static bool IsSavegameAlive(int _savegameIndex)
-    {
-        bool found = false;
-
-        string dataPath = Path.Combine(Application.persistentDataPath, "Savegame_" + _savegameIndex + ".txt"); ;
-
-        if (File.Exists(dataPath))
-        {
-            found = true;
-        }
-        return found;
-    }
-
-
-    /// <summary>
-    /// Returns a list of existing savegame indices.
+    /// Returns a list of existing savegame informations.
     /// </summary>
     /// <param name="_maxSavegames"></param>
     /// <returns></returns>
-    public static List<SavegameInformation> GetSavegameIndices(int _maxSavegames) 
+    public static List<SavegameInformation> GetSavegameInformations()
     {
-        List<SavegameInformation> savegamesIndices = new List<SavegameInformation>();
+        List<SavegameInformation> savegameInformations = new List<SavegameInformation>();
         List<Savegame> savegames = new List<Savegame>();
 
-        for (int i = 0; i < _maxSavegames; i++)
-        {
-            string dataPath = Path.Combine(Application.persistentDataPath, "Savegame_" + i + ".txt");
+        DirectoryInfo info = new DirectoryInfo(Application.persistentDataPath);
+        FileInfo[] fileInfo = info.GetFiles();
 
-            if (File.Exists(dataPath))
+        foreach (FileInfo file in fileInfo)
+        {
+            using (StreamReader streamReader = file.OpenText())
             {
-                using (StreamReader streamReader = File.OpenText(dataPath))
-                {
-                    string jsonString = streamReader.ReadToEnd();
-                    savegames.Add(JsonUtility.FromJson<Savegame>(jsonString));
-                }
+                string jsonString = streamReader.ReadToEnd();
+                savegames.Add(JsonUtility.FromJson<Savegame>(jsonString));
             }
         }
 
         //Sorting
-        savegames.Sort((y, x) => DateTime.Compare(JsonUtility.FromJson<JsonDateTime>(x.jsonTimestamp), JsonUtility.FromJson<JsonDateTime>(y.jsonTimestamp)));
+        savegames.Sort((y, x) => x.timestamp.CompareTo(y.timestamp));
 
         for (int i = 0; i < savegames.Count; i++)
         {
             Savegame s = savegames[i];
-            savegamesIndices.Add(new SavegameInformation(s.index, s.jsonTimestamp, SerializeSpriteHelper.DeserializeSprite(s.jsonSprite)));
+            savegameInformations.Add(new SavegameInformation(s.timestamp, s.gameName, s.gameMode));
         }
 
-        return savegamesIndices;
+        return savegameInformations;
     }
 
 
     /// <summary>
     /// Deletes all savegames.
     /// </summary>
-    public static void DeleteAllSavegames(int _maxSavegames = 10)
+    public static void DeleteAllSavegames()
     {
-        for (int i = 0; i < _maxSavegames; i++)
+        DirectoryInfo info = new DirectoryInfo(Application.persistentDataPath);
+        FileInfo[] fileInfo = info.GetFiles();
+
+        foreach (FileInfo file in fileInfo)
         {
-            DeleteSavegame(i);
+            file.Delete();
         }
     }
 }

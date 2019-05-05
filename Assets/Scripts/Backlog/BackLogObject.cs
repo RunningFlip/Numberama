@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 
-[Serializable]
 public class BackLogObject
 {
     //Type
-    public BackLogType backLogType = BackLogType.None;
+    private BackLogType backLogType = BackLogType.None;
 
     //Pair
     private NumberComponent numberComponentA;
@@ -75,30 +73,6 @@ public class BackLogObject
     }
 
 
-    /// <summary>
-    /// Redos the strike on both components in the pair.
-    /// </summary>
-    public void RedoAction()
-    {
-        //Set line status
-        switch (backLogType)
-        {
-            case BackLogType.BackLog_Fields:
-                RedoFields();
-                break;
-
-            case BackLogType.BackLog_Line:
-                RedoFields();
-                RedoLine();
-                break;
-
-            case BackLogType.BackLog_MoreNumbers:
-                RedoMoreNumbers();
-                break;
-        }
-    }
-
-
     //UNDO------------------------------------------------------------------------------
     private void UndoFields()
     {
@@ -128,24 +102,6 @@ public class BackLogObject
     //UNDO------------------------------------------------------------------------------
 
 
-    //REDO------------------------------------------------------------------------------
-    private void RedoFields()
-    {
-        if (numberComponentA != null) numberComponentA.FieldStrike();
-        if (numberComponentB != null) numberComponentB.FieldStrike();
-    }
-    private void RedoLine()
-    {
-        if (lineA > -1) GameplayController.Instance.SetLineStatus(lineA, false);
-        if (lineB > -1) GameplayController.Instance.SetLineStatus(lineB, false);
-    }
-    private void RedoMoreNumbers()
-    {
-        GameplayController.Instance.TrySpawnMoreNumbers();
-    }
-    //REDO------------------------------------------------------------------------------
-
-
     //Checks if both components are still existing.
     public bool IsStillAlive()
     {
@@ -161,7 +117,6 @@ public class BackLogObject
     {
         return backLogType;
     }
-
 
 
     //Getter methods---------------------------------------------------------------

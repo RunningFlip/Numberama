@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 
@@ -7,7 +6,8 @@ public class SavegameButton : MonoBehaviour
 {
     [Header("UI Elements")]
     public Button button;
-    public Text text;
+    public Text gameNameLabel;
+    public Text gameModeLabel;
     public Image screenshotImage;
     [Space]
     public GameObject editSymbol;
@@ -17,16 +17,16 @@ public class SavegameButton : MonoBehaviour
     private bool inEditing;
 
     //Savegameindex
-    private SavegameInformation savegameIndex;
+    private SavegameInformation savegameInformation;
 
 
     /// <summary>
     /// Setups the button.
     /// </summary>
     /// <param name="_jsonTimestamp"></param>
-    public void ButtonSetup(string _jsonTimestamp)
+    public void ButtonSetup(string _gameName, int _gameMode)
     {
-        SetTimestampLabel(_jsonTimestamp);
+        SetGameName(_gameName, _gameMode);
         SetScreenshotImage();
     }
 
@@ -35,10 +35,10 @@ public class SavegameButton : MonoBehaviour
     /// Converts the timestamp in a readable string.
     /// </summary>
     /// <param name="_jsonTimestamp"></param>
-    private void SetTimestampLabel(string _jsonTimestamp)
+    private void SetGameName(string _gameName, int _gameMode)
     {
-        DateTime stamp = JsonUtility.FromJson<JsonDateTime>(_jsonTimestamp);
-        text.text = stamp.ToString();
+        gameNameLabel.text = _gameName;
+        gameModeLabel.text = _gameMode.ToString();
     }
 
 
@@ -47,9 +47,9 @@ public class SavegameButton : MonoBehaviour
     /// </summary>
     private void SetScreenshotImage()
     {
-        if (savegameIndex.screenshot != null) 
+        if (savegameInformation.screenshot != null) 
         {
-            screenshotImage.sprite = savegameIndex.screenshot;
+            screenshotImage.sprite = savegameInformation.screenshot;
         }
     }
 
@@ -57,10 +57,10 @@ public class SavegameButton : MonoBehaviour
     /// <summary>
     /// Sets the savgameindex object.
     /// </summary>
-    /// <param name="_savegameIndex"></param>
-    public void SetSavegameIndex(SavegameInformation _savegameIndex)
+    /// <param name="_savegameInformation"></param>
+    public void SetSavegameInformation(SavegameInformation _savegameInformation)
     {
-        savegameIndex = _savegameIndex;
+        savegameInformation = _savegameInformation;
     }
 
 
@@ -68,9 +68,9 @@ public class SavegameButton : MonoBehaviour
     /// Returns the savgameindex object.
     /// </summary>
     /// <returns></returns>
-    public SavegameInformation GetSavegameIndex()
+    public SavegameInformation GetSavegameInformation()
     {
-        return savegameIndex;
+        return savegameInformation;
     }
 
 
