@@ -51,6 +51,7 @@ public class MainMenuController : MonoBehaviour
 
         //DEBUG - resets the savegames
         //DataHelper.DeleteAllSavegames();
+        //PlayerPrefs.DeleteAll();
     }
 
 
@@ -75,6 +76,7 @@ public class MainMenuController : MonoBehaviour
         PlayerPrefs.SetInt("SavegameTimestamp", -1);
         PlayerPrefs.SetString("SavegameName", gameNameInputField.text);
         PlayerPrefs.SetInt("SavegameMode", gameModeDropDown.value);
+        PlayerPrefs.Save();
 
         //Scene
         SceneManager.LoadScene("MainGameScene");

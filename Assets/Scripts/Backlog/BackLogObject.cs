@@ -81,8 +81,8 @@ public class BackLogObject
     }
     private void UndoLine()
     {
-        if (lineA > -1) GameplayController.Instance.SetLineStatus(lineA, true);
-        if (lineB > -1) GameplayController.Instance.SetLineStatus(lineB, true);
+        if (lineA > -1) NumberField.Instance.SetLineStatus(lineA, true);
+        if (lineB > -1) NumberField.Instance.SetLineStatus(lineB, true);
     }
     private void UndoMoreNumbers()
     {
@@ -92,8 +92,8 @@ public class BackLogObject
 
             if (num != null)
             {
-                GameplayController.Instance.SelectionReset();
-                GameplayController.Instance.RemoveNumberFromList(num);
+                NumberField.Instance.FieldSelectionReset();
+                NumberField.Instance.RemoveNumberFromList(num);
 
                 GameObject.Destroy(num.gameObject);
             }

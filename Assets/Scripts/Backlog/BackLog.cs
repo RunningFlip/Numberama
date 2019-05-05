@@ -6,6 +6,8 @@ public class BackLog
     private int maxBackLogLength;
     private List<BackLogObject> backLogList;
 
+    private NumberField myNumberField;
+
 
     public BackLog(SerializedBackLog _serializedBackLog = null)
     {
@@ -57,41 +59,23 @@ public class BackLog
             {
                 case BackLogType.BackLog_Fields:
                     backLogList.Add(new BackLogObject(
-                        GameplayController.Instance.GetNumberComponent(b.numA.x, b.numA.y),
-                        GameplayController.Instance.GetNumberComponent(b.numB.x, b.numB.y)));
+                        NumberField.Instance.GetNumberComponent(b.numA.x, b.numA.y),
+                        NumberField.Instance.GetNumberComponent(b.numB.x, b.numB.y)));
                     break;
 
                 case BackLogType.BackLog_Line:
                     backLogList.Add(new BackLogObject(
-                        GameplayController.Instance.GetNumberComponent(b.numA.x, b.numA.y),
-                        GameplayController.Instance.GetNumberComponent(b.numB.x, b.numB.y),
+                        NumberField.Instance.GetNumberComponent(b.numA.x, b.numA.y),
+                        NumberField.Instance.GetNumberComponent(b.numB.x, b.numB.y),
                         b.lineA,
                         b.lineB));
                     break;
 
                 case BackLogType.BackLog_MoreNumbers:                  
-                    backLogList.Add(new BackLogObject(CreateAddedNumbersListFromBackup(b.addedNumbersList)));
+                    backLogList.Add(new BackLogObject(NumberHelper.CreateNumbersListFromSer(ref b.addedNumbersList)));
                     break;
             }
         }
-    }
-
-
-    /// <summary>
-    /// Creates a list from numbercomponents out of numberelements.
-    /// </summary>
-    /// <param name="_addedNumbersList"></param>
-    /// <returns></returns>
-    private List<NumberComponent> CreateAddedNumbersListFromBackup(List<SerializableNumberField> _addedNumbersList)
-    {
-        List<NumberComponent> addedNumbers = new List<NumberComponent>();
-
-        for (int i = 0; i < _addedNumbersList.Count; i++)
-        {         
-            SerializableNumberField n = _addedNumbersList[i];
-            addedNumbers.Add(GameplayController.Instance.GetNumberComponent(n.x, n.y));
-        }
-        return addedNumbers;
     }
 
 
@@ -159,11 +143,11 @@ public class BackLog
             //Update strikes pairs in the UI
             if (backLogObject.GetBackLogType() != BackLogType.BackLog_MoreNumbers)
             {
-                GameplayController.Instance.IncreasePairByInt(-1);
+                NumberField.Instance.IncreasePairByInt(-1);
             }
 
             //Updates the undo count in the UI
-            GameplayController.Instance.IncreaseUndoByInt(1);
+            NumberField.Instance.IncreaseUndoByInt(1);
         }
     }
 }

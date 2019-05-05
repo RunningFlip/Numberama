@@ -144,12 +144,23 @@ MonoBehaviour:
   GameParameter: {fileID: 11400000, guid: 3f7ce0e9c3f5fe745858ed966600e68c, type: 2}
   uiController: {fileID: 1542418663}
   spawnParent: {fileID: 1865043714}
-  numberFieldPrefab_Left: {fileID: 8023269684463369386, guid: b5c5b6aa308fb5e44829043654d3b1f6,
-    type: 3}
-  numberFieldPrefab_Right: {fileID: 8023269684463369386, guid: d0cf2ab14a06316478b840c0b0f4ebfe,
-    type: 3}
-  fieldSelectionA: {fileID: 0}
-  fieldSelectionB: {fileID: 0}
+  numberField:
+    fieldSelectionA: {fileID: 0}
+    fieldSelectionB: {fileID: 0}
+    right: 0
+    started: 0
+    isDirty: 0
+    spawnParent: {fileID: 0}
+    maxLineLength: 0
+    numberFieldPrefab_Left: {fileID: 0}
+    numberFieldPrefab_Right: {fileID: 0}
+    patternConfig: {fileID: 0}
+    strikedPairs: 0
+    undoCount: 0
+    numberFieldsCount: 0
+    strikedLines: 
+    currentX: 0
+    currentY: 0
   passedTime: 0
 --- !u!4 &356303881
 Transform:
@@ -1250,9 +1261,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridLayoutGroup: {fileID: 1865043718}
+  menuButton: {fileID: 695288244}
   moreFieldsButton: {fileID: 2089166503}
   undoStrikeButton: {fileID: 2012622288}
-  menuButton: {fileID: 695288244}
+  hintButton: {fileID: 827141570}
   timerLabel: {fileID: 751024839}
   pairValueText: {fileID: 518701213}
   undoCountText: {fileID: 0}
@@ -1292,7 +1304,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000015258789}
+  m_AnchoredPosition: {x: 0, y: 0.000015584486}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1865043715

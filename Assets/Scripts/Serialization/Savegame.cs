@@ -35,9 +35,6 @@ public class Savegame
 
     public Savegame(List<SerializableNumberField> _serializedNumberFields, List<int> _strikedLines, string _gameName, int _gameMode, float _passedTime, BackLog _backLog, int _pairsFound, int _undos)
     {
-        //Delete old savegame
-        DataHelper.DeleteSavegame(PlayerPrefs.GetInt("SavegameTimestamp"));
-
         //Timestamp
         DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
         timestamp = (int)(DateTime.UtcNow - epochStart).TotalSeconds;

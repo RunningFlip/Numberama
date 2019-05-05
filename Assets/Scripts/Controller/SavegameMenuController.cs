@@ -58,6 +58,7 @@ public class SavegameMenuController : MonoBehaviour
         PlayerPrefs.SetInt("SavegameTimestamp", _savegameInformation.timestamp);
         PlayerPrefs.SetString("SavegameName", _savegameInformation.gameName);
         PlayerPrefs.SetInt("SavegameMode", _savegameInformation.gameMode);
+        PlayerPrefs.Save();
 
         SceneManager.LoadScene("MainGameScene");
     }

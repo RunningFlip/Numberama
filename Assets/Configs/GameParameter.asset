@@ -18,3 +18,7 @@ MonoBehaviour:
     type: 2}
   hardNumberPatternConfig: {fileID: 11400000, guid: 8faad2da1a5b525409a9566b39d9f94d,
     type: 2}
+  numberFieldPrefab_Left: {fileID: 8023269684463369386, guid: b5c5b6aa308fb5e44829043654d3b1f6,
+    type: 3}
+  numberFieldPrefab_Right: {fileID: 8023269684463369386, guid: d0cf2ab14a06316478b840c0b0f4ebfe,
+    type: 3}

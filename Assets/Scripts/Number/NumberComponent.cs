@@ -107,7 +107,7 @@ public class NumberComponent : MonoBehaviour
 
         selected = false;
 
-        GameplayController.Instance.FieldSelected(this, false);
+        NumberField.Instance.FieldSelected(this, false);
     }
 
 
@@ -123,7 +123,7 @@ public class NumberComponent : MonoBehaviour
 
             selected = true;
 
-            GameplayController.Instance.FieldSelected(this, true);
+            NumberField.Instance.FieldSelected(this, true);
         }
         else
         {

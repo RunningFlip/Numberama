@@ -1,18 +1,49 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using System;
 
 
 public static class DataHelper
 {
+
+    /// <summary>
+    /// Creates a savegame and returns it.
+    /// </summary>
+    /// <returns></returns>
+    private static Savegame GetSavegame()
+    {
+        NumberField numberField = NumberField.Instance;
+
+        //Create number list
+        List<SerializableNumberField> numberFields = NumberHelper.CreateSerNumberFieldList(ref numberField);
+
+        //PlayerPrefs
+        int oldSavegameTimestamp = PlayerPrefs.GetInt("SavegameTimestamp");
+        string gameName = PlayerPrefs.GetString("SavegameName");
+        int gameMode = PlayerPrefs.GetInt("SavegameMode");
+
+        //Delete old savegame
+        DeleteSavegame(oldSavegameTimestamp);
+
+        //Returns a new savegame
+        return new Savegame(numberFields,
+            numberField.GetStrikedLines(), 
+            gameName, 
+            gameMode, 
+            GameplayController.Instance.passedTime,
+            numberField.GetBackLog(), 
+            numberField.GetStrikedPairs(),
+            numberField.GetUndoCount());
+    }
+
+
     /// <summary>
     /// Saves the progress from the current game on the given savegame-index.
     /// </summary>
     /// <param name="_savegameIndex"></param>
     public static void SaveProgress()
     {
-        Savegame savegame = GameplayController.Instance.GetSavegame();
+        Savegame savegame = GetSavegame();
 
         string jsonString = JsonUtility.ToJson(savegame);
         string dataPath = Path.Combine(Application.persistentDataPath, "Savegame_" + savegame.timestamp + ".txt");

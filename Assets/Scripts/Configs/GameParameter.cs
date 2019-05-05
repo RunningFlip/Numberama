@@ -11,4 +11,8 @@ public class GameParameter : ScriptableObject
     [Header("Number Pattern Configs")]
     public NumberPatternConfig defaultNumberPatternConfig;
     public NumberPatternConfig hardNumberPatternConfig;
+
+    [Header("Number Field Prefabs")]
+    public GameObject numberFieldPrefab_Left;
+    public GameObject numberFieldPrefab_Right;
 }

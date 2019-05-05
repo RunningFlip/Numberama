@@ -11,9 +11,10 @@ public class UIController : MonoBehaviour
     public GridLayoutGroup gridLayoutGroup;
 
     [Header("Buttons")]
+    public Button menuButton;
     public Button moreFieldsButton;
     public Button undoStrikeButton;
-    public Button menuButton;
+    public Button hintButton;
 
     [Header("Labels")]
     public Text timerLabel;
@@ -27,9 +28,10 @@ public class UIController : MonoBehaviour
         gridLayoutGroup.constraintCount = GameplayController.Instance.GameParameter.maxLineLength;
 
         //Listeners
+        menuButton.onClick.AddListener(                 delegate { StartCoroutine(BackToGameMenu());                    });
         moreFieldsButton.onClick.AddListener(           delegate { GameplayController.Instance.TrySpawnMoreNumbers();   });
         undoStrikeButton.onClick.AddListener(           delegate { GameplayController.Instance.UndoLastAction();        });
-        menuButton.onClick.AddListener(                 delegate { StartCoroutine(BackToGameMenu());                    });
+        hintButton.onClick.AddListener(                 delegate { GameplayController.Instance.ShowNextHint();          });
     }
 
 
@@ -47,8 +49,10 @@ public class UIController : MonoBehaviour
         //Remove listener from button
         menuButton.onClick.RemoveListener(delegate { StartCoroutine(BackToGameMenu()); });
 
+        Debug.Log(NumberField.Instance.IsDirty());
+
         //Save game
-        if (GameplayController.Instance.IsDirty())
+        if (NumberField.Instance.IsDirty())
         {
             yield return new WaitForEndOfFrame();
             DataHelper.SaveProgress();
