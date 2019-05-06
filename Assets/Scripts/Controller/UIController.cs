@@ -49,8 +49,6 @@ public class UIController : MonoBehaviour
         //Remove listener from button
         menuButton.onClick.RemoveListener(delegate { StartCoroutine(BackToGameMenu()); });
 
-        Debug.Log(NumberField.Instance.IsDirty());
-
         //Save game
         if (NumberField.Instance.IsDirty())
         {

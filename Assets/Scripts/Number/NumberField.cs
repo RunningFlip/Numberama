@@ -13,6 +13,10 @@ public class NumberField
     private NumberComponent fieldSelectionA;
     private NumberComponent fieldSelectionB;
 
+    //Last Hints
+    private NumberComponent lastHintA;
+    private NumberComponent lastHintB;
+
     //Flag
     private bool right;
     private bool started;
@@ -309,7 +313,19 @@ public class NumberField
             }
         }
 
-        if (fieldSelectionA != null && fieldSelectionB != null) CheckPair();
+        if (fieldSelectionA != null && fieldSelectionB != null)
+        {
+            bool pairFound = CheckPair(fieldSelectionA, fieldSelectionB);
+
+            if (pairFound)
+            {
+                SelectionStrike();
+            }
+            else
+            {
+                FieldSelectionReset();
+            }
+        }
     }
 
 
@@ -326,70 +342,70 @@ public class NumberField
     /// <summary>
     /// Checks if the pairs a valid and striks if they are valid them.
     /// </summary>
-    private void CheckPair()
+    private bool CheckPair(NumberComponent _selectionA, NumberComponent _selectionB)
     {
-        if (fieldSelectionA.number == fieldSelectionB.number
-            || fieldSelectionA.number + fieldSelectionB.number == 10)
+        NumberComponent selectionA = _selectionA;
+        NumberComponent selectionB = _selectionB;
+
+        if (selectionA == selectionB) return false;
+
+        if (selectionA.number == selectionB.number
+            || selectionA.number + selectionB.number == 10)
         {
             //VERTICAL-CHECK
             //Are both selected numberComponents on the same x-Position?
-            if (fieldSelectionA.positionX == fieldSelectionB.positionX)
+            if (selectionA.positionX == selectionB.positionX)
             {
                 //Sort by position
-                if (fieldSelectionA.positionY > fieldSelectionB.positionY)
+                if (selectionA.positionY > selectionB.positionY)
                 {
-                    NumberComponent backlog = fieldSelectionA;
-                    fieldSelectionA = fieldSelectionB;
-                    fieldSelectionB = backlog;
+                    NumberComponent backlog = selectionA;
+                    selectionA = selectionB;
+                    selectionB = backlog;
                 }
 
                 //Check
-                for (int i = fieldSelectionA.positionY + 1; i <= fieldSelectionB.positionY; i++)
+                for (int i = selectionA.positionY + 1; i <= selectionB.positionY; i++)
                 {
-                    NumberComponent component = numberFieldComponents[i][fieldSelectionA.positionX];
+                    NumberComponent component = numberFieldComponents[i][selectionA.positionX];
 
-                    if (!component.strike && (component != fieldSelectionA && component != fieldSelectionB))
+                    if (!component.strike && (component != selectionA && component != selectionB))
                     {
-                        FieldSelectionReset();
-                        return;
-                    }
-                    else
-                    {
-                        SelectionStrike();
-                        return;
+                        return false;
                     }
                 }
+                return true;
             }
             //VERTICAL-CHECK
             //Is entered, if the numberComponents are in the same or different row, but don't have the same x-position
             else
             {
-                if (fieldSelectionA.positionY != fieldSelectionB.positionY)
+                if (selectionA.positionY != selectionB.positionY)
                 {
                     //Sort by position
-                    if (fieldSelectionA.positionY > fieldSelectionB.positionY)
+                    if (selectionA.positionY > selectionB.positionY)
                     {
-                        NumberComponent backlog = fieldSelectionA;
-                        fieldSelectionA = fieldSelectionB;
-                        fieldSelectionB = backlog;
+                        NumberComponent backlog = selectionA;
+                        selectionA = selectionB;
+                        selectionB = backlog;
                     }
                 }
                 else
                 {
                     //Sort by position
-                    if (fieldSelectionA.positionX > fieldSelectionB.positionX)
+                    if (selectionA.positionX > selectionB.positionX)
                     {
-                        NumberComponent backlog = fieldSelectionA;
-                        fieldSelectionA = fieldSelectionB;
-                        fieldSelectionB = backlog;
+                        NumberComponent backlog = selectionA;
+                        selectionA = selectionB;
+                        selectionB = backlog;
                     }
                 }
 
                 NumberComponent component = null;
-                int numX = fieldSelectionA.positionX; //Current x-position of the component-element
-                int numY = fieldSelectionA.positionY; //Current y-position of the component-element
+                int numX = selectionA.positionX; //Current x-position of the component-element
+                int numY = selectionA.positionY; //Current y-position of the component-element
 
-                while (component != fieldSelectionB)
+                while (component != selectionB)
                 {
                     //Checks if a new line gots reached
                     if (numX == maxLineLength)
@@ -402,23 +418,21 @@ public class NumberField
                     component = numberFieldComponents[numY][numX];
 
                     //Checks if an invalid element got reached
-                    if (!component.strike && (component != fieldSelectionA && component != fieldSelectionB))
+                    if (!component.strike && (component != selectionA && component != selectionB))
                     {
-                        FieldSelectionReset();
-                        return;
+                        return false;
                     }
                     //Increments to the next element in line
                     numX++;
                 }
 
                 //Is called if loop does not reach the "return".
-                SelectionStrike();
-                return;
+                return true;
             }
         }
         else
         {
-            FieldSelectionReset();
+            return false;
         }
     }
 
@@ -436,6 +450,12 @@ public class NumberField
 
         int lastYA = fieldSelectionA.positionY;
         int lastYB = fieldSelectionB.positionY;
+
+        //Checks if at least one of the numbers is a hint and resets the hint if neccessary
+        if (CheckIsHint(fieldSelectionA, fieldSelectionB))
+        {
+            ResetHint();
+        } 
 
         //Strikes the selected fields
         fieldSelectionA.FieldStrike();
@@ -556,6 +576,8 @@ public class NumberField
     /// </summary>
     public void UndoLastAction()
     {
+        if (backLog.IsEmpty()) ResetHint();
+
         backLog.UndoLastAction();
     }
 
@@ -565,7 +587,82 @@ public class NumberField
     /// </summary>
     public void ShowNextHint()
     {
-        //TODO
+        bool pairFound = false;
+
+        int x = 0;
+        int y = 0;
+        int maxY = numberFieldComponents.Count - 1;
+
+        NumberComponent numA = null;
+        NumberComponent numB = null;
+
+        while (!pairFound && y < maxY)
+        {
+            numA = numberFieldComponents[y][x];
+
+            for (int i = 0; i < maxY; i++)
+            {
+                for (int j = 0; j < numberFieldComponents[i].Count; j++)
+                {
+                    numB = numberFieldComponents[i][j];
+
+                    if (!numA.strike && !numB.strike)
+                    {
+                        pairFound = CheckPair(numA, numB);
+                        if (pairFound) break;
+                    }
+                }
+
+                if (pairFound) break;
+            }
+        
+            if (x < maxLineLength - 1)
+            {
+                x++;
+            }
+            else if (y < maxY - 1)
+            {
+                x = 0;
+                y++;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        if (pairFound)
+        {
+            ResetHint();
+
+            lastHintA = numA;
+            lastHintB = numB;
+
+            numA.SetHintStatus(true);
+            numB.SetHintStatus(true);
+        }
+    }
+
+
+    /// <summary>
+    /// Resets the hints.
+    /// </summary>
+    public void ResetHint()
+    {
+        if (lastHintA != null) lastHintA.SetHintStatus(false);
+        if (lastHintB != null) lastHintB.SetHintStatus(false);
+    }
+
+
+    /// <summary>
+    /// Returns true if one of the given numbers is a current hint.
+    /// </summary>
+    /// <param name="_numberComponent"></param>
+    /// <returns></returns>
+    public bool CheckIsHint(NumberComponent _numberComponentA, NumberComponent _numberComponentB)
+    {
+        return _numberComponentA == lastHintA || _numberComponentA == lastHintB 
+            || _numberComponentB == lastHintA || _numberComponentB == lastHintB;
     }
 
 

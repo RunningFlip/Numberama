@@ -46,6 +46,16 @@ public class BackLog
 
 
     /// <summary>
+    /// Returns true if the backlog is empty.
+    /// </summary>
+    /// <returns></returns>
+    public bool IsEmpty()
+    {
+        return backLogList.Count == 0;
+    }
+
+
+    /// <summary>
     /// Reconnects the backup with the new backLog.
     /// </summary>
     /// <param name="_serializedBackup"></param>

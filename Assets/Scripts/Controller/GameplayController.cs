@@ -50,6 +50,7 @@ public class GameplayController : MonoBehaviour
         {   
             //Creates a numberfield with a given savegame
             Savegame savegame = DataHelper.LoadProgress(savegameTimestamp);
+            passedTime = savegame.passedTime;
             numberField = new NumberField(spawnParent, patternConfig, savegame);
         }
         else

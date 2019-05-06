@@ -85,6 +85,7 @@ public class NumberComponent : MonoBehaviour
     public void FieldStrike()
     {
         strike = true;
+        hintActive = false;
         button.interactable = false;
 
         backgroundImage.sprite = strikedSprite;
@@ -103,6 +104,10 @@ public class NumberComponent : MonoBehaviour
         {
             backgroundImage.sprite = defaultSprite;
             numberLabel.color = startColor;
+        }
+        if (hintActive)
+        {
+            SetHintStatus(hintActive);
         }
 
         selected = false;
@@ -135,18 +140,22 @@ public class NumberComponent : MonoBehaviour
     /// <summary>
     /// Toggles the hint effect.
     /// </summary>
-    public void ToggleHint()
+    public void SetHintStatus(bool _status)
     {
-        hintActive = !hintActive;
-        numberLabel.color = alternativeTextColor;
+        if (!strike)
+        {
+            hintActive = _status;
 
-        if (hintActive)
-        {
-            backgroundImage.sprite = hintSprite;
-        }
-        else
-        {
-            backgroundImage.sprite = defaultSprite;
+            if (hintActive)
+            {
+                backgroundImage.sprite = hintSprite;
+                numberLabel.color = alternativeTextColor;
+            }
+            else
+            {
+                backgroundImage.sprite = defaultSprite;
+                numberLabel.color = startColor;
+            }
         }
     }
 
