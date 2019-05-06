@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,6 +6,10 @@ using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
+    [Header("Start Animation")]
+    public Button logoButton;
+    public Animator startAnimator;
+
     [Header("Menu Buttons")]
     public Button showPopupButton;
     public Button loadSavegameMenuButton;
@@ -32,18 +35,32 @@ public class MainMenuController : MonoBehaviour
 
     private void Start()
     {
-        //Buttons
-        showPopupButton.onClick.AddListener(            delegate { TogglePopup();                               });
-        closePopupButton.onClick.AddListener(           delegate { TogglePopup();                               });
-        startNewGameButton.onClick.AddListener(         delegate { StartNewGame();                               });
+        //logoButton.onClick.AddListener(delegate { startAnimator.SetTrigger("Start"); });
 
-        loadSavegameMenuButton.onClick.AddListener(     delegate { SceneManager.LoadScene("SavegameMenuScene"); });
-        loadSettingsMenuButton.onClick.AddListener(     delegate { SceneManager.LoadScene("SettingsScene");     });
-        loadHelpMenuButton.onClick.AddListener(         delegate { SceneManager.LoadScene("HelpScene");         });
-        loadTrphiesMenuButton.onClick.AddListener(      delegate { SceneManager.LoadScene("TrophiesScene");     });
+        MenuSetup();
+    }
+
+
+    /// <summary>
+    /// Setups the menu listeners.
+    /// </summary>
+    public void MenuSetup()
+    {
+        //Logo Button
+        logoButton.onClick.RemoveAllListeners();
+
+        //Buttons
+        showPopupButton.onClick.AddListener(delegate { TogglePopup(); });
+        closePopupButton.onClick.AddListener(delegate { TogglePopup(); });
+        startNewGameButton.onClick.AddListener(delegate { StartNewGame(); });
+
+        loadSavegameMenuButton.onClick.AddListener(delegate { SceneManager.LoadScene("SavegameMenuScene"); });
+        loadSettingsMenuButton.onClick.AddListener(delegate { SceneManager.LoadScene("SettingsScene"); });
+        loadHelpMenuButton.onClick.AddListener(delegate { SceneManager.LoadScene("HelpScene"); });
+        loadTrphiesMenuButton.onClick.AddListener(delegate { SceneManager.LoadScene("TrophiesScene"); });
 
         //Popup
-        gameNameInputField.onValueChanged.AddListener(  delegate { ChecksInputField();                          });
+        gameNameInputField.onValueChanged.AddListener(delegate { ChecksInputField(); });
 
         gameModeDropDown.AddOptions(new List<Dropdown.OptionData>() { new Dropdown.OptionData("Normal"), new Dropdown.OptionData("Hardmode") });
         startNewGameButton.interactable = false;

@@ -28,7 +28,26 @@ public class SettingsController : MonoBehaviour
         darkModeToggle.onValueChanged.AddListener(          delegate { ToggleDarkMode();            });
 
         //Settings setup
+        PlayerPrefsInit();
         SettingsSetup();
+    }
+
+
+    private void PlayerPrefsInit()
+    {
+        int init = PlayerPrefs.GetInt("playerPrefsInit");
+
+        if (init == 0)
+        {
+            PlayerPrefs.SetInt("playerPrefsInit", 1);
+
+            PlayerPrefs.SetInt("soundEffectsEnabled", 1);
+            PlayerPrefs.SetInt("hintsEnabled", 1);
+            PlayerPrefs.SetInt("backtrackingEnabled", 1);
+            PlayerPrefs.SetInt("darkmodeEnabled", 1);
+
+            PlayerPrefs.Save();
+        }
     }
 
 

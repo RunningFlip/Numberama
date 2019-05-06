@@ -32,12 +32,37 @@ public class UIController : MonoBehaviour
         moreFieldsButton.onClick.AddListener(           delegate { GameplayController.Instance.TrySpawnMoreNumbers();   });
         undoStrikeButton.onClick.AddListener(           delegate { GameplayController.Instance.UndoLastAction();        });
         hintButton.onClick.AddListener(                 delegate { GameplayController.Instance.ShowNextHint();          });
+
+        //Settings
+        ApplySettings();
     }
 
 
     private void Update()
     {
         UpdateTimer();
+    }
+
+
+    /// <summary>
+    /// Applies the settings to the game.
+    /// </summary>
+    private void ApplySettings()
+    {
+        int hintsActivated = PlayerPrefs.GetInt("hintsEnabled");
+        int backtrackingEnabled = PlayerPrefs.GetInt("backtrackingEnabled");
+
+        if (hintsActivated == 0)
+        {
+            hintButton.interactable = false;
+            hintButton.gameObject.SetActive(false);
+        }
+
+        if (backtrackingEnabled == 0)
+        {
+            undoStrikeButton.interactable = false;
+            undoStrikeButton.gameObject.SetActive(false);
+        }
     }
 
 
