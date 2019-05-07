@@ -20,7 +20,7 @@ public class BackLog
         }
         else
         {
-            maxBackLogLength = GameplayController.Instance.GameParameter.maxBackTracking;
+            maxBackLogLength = ParameterManager.Instance.GameParameter.maxBackTracking;
         }
     }
 
@@ -158,6 +158,9 @@ public class BackLog
 
             //Updates the undo count in the UI
             NumberField.Instance.IncreaseUndoByInt(1);
+
+            //Undo audio
+            GameplayController.Instance.undoAudioClipObject.PlaySound();
         }
     }
 }

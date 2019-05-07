@@ -10,18 +10,20 @@ public class AudioParameter : ScriptableObject
     public float introEaseTime;
 
     [Header("Audio UI")]
-    public AudioObject defaultButtonClip;
-    public AudioObject defaultToggleClip;
-    public AudioObject defaultInputFieldClip;
+    public AudioClipInformation defaultButtonClip;
+    public AudioClipInformation defaultToggleClip;
+    public AudioClipInformation defaultInputFieldClip;
 
     [Header("Audio Music")]
-    public AudioObject menuMusic;
-    public AudioObject inGameMusic;
+    public AudioClipInformation menuMusic;
+    public AudioClipInformation inGameMusic;
 
     [Header("Game Sounds")]
-    public AudioObject selectionClip;
-    public AudioObject deselectionClip;
-    public AudioObject strikeClip;
-    public AudioObject hintClip;
-    public AudioObject undoClip;
+    public AudioClipInformation selectionClip;
+    public AudioClipInformation deselectionClip;
+    public AudioClipInformation strikeFieldClip;
+    public AudioClipInformation strikeLineClip;
+    public AudioClipInformation addNumbersClip;
+    public AudioClipInformation hintClip;
+    public AudioClipInformation undoClip;
 }

@@ -24,27 +24,33 @@ public class MusicController : MonoBehaviour
     private AudioSource[] audioSources = new AudioSource[0];
 
 
-    private void Start()
+    private void Awake()
     {
         //Singelton
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
 
-        //Dont Destroy
         DontDestroyOnLoad(this);
+    }
 
+
+    private void Start()
+    {
         //Init
         introEaseTime = ParameterManager.Instance.AudioParameter.introEaseTime;
     }
 
 
-    private void Setup()
-    {
-        index = 0;
-        audioSources = GetComponents<AudioSource>();
-        easeSpeed = ParameterManager.Instance.AudioParameter.easeSpeed * 0.5f;
-    }
-
-
+    /// <summary>
+    /// Changes the music to a given type.
+    /// </summary>
+    /// <param name="_musicType"></param>
     public void SetMusicType(MusicType _musicType)
     {
         if (audioSources.Length == 0) Setup();
@@ -72,6 +78,21 @@ public class MusicController : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Setups the musiccontroller.
+    /// </summary>
+    private void Setup()
+    {
+        index = 0;
+        audioSources = GetComponents<AudioSource>();
+        easeSpeed = ParameterManager.Instance.AudioParameter.easeSpeed * 0.5f;
+    }
+
+
+    /// <summary>
+    /// Prepares the easing.
+    /// </summary>
+    /// <param name="_audioClip"></param>
     private void HandleEase(AudioClip _audioClip)
     {
         StopAllCoroutines(); //Safty first
@@ -86,6 +107,13 @@ public class MusicController : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Eases an audioclip in or out.
+    /// </summary>
+    /// <param name="_index"></param>
+    /// <param name="_easeIn"></param>
+    /// <param name="_audioClip"></param>
+    /// <returns></returns>
     private IEnumerator EaseAudioClip(int _index, bool _easeIn, AudioClip _audioClip = null)
     {
         AudioSource audioSource = audioSources[_index];
@@ -121,6 +149,10 @@ public class MusicController : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Starts easing the music while starting the menu.
+    /// </summary>
+    /// <param name="_status"></param>
     public void IntroEasing(bool _status)
     {
         if (_status)
@@ -134,6 +166,11 @@ public class MusicController : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Routine for the intro easing.
+    /// </summary>
+    /// <param name="_source"></param>
+    /// <returns></returns>
     private IEnumerator IntroEase(AudioSource _source = null)
     {
         if (_source != null) {

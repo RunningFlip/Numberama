@@ -25,7 +25,7 @@ public class UIController : MonoBehaviour
     private void Start()
     {
         //Layout
-        gridLayoutGroup.constraintCount = GameplayController.Instance.GameParameter.maxLineLength;
+        gridLayoutGroup.constraintCount = ParameterManager.Instance.GameParameter.maxLineLength;
 
         //Listeners
         menuButton.onClick.AddListener(                 delegate { StartCoroutine(BackToGameMenu());                    });

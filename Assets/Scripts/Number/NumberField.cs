@@ -58,9 +58,9 @@ public class NumberField
 
         //Spawning
         spawnParent = _spawnParent;
-        maxLineLength           = GameplayController.Instance.GameParameter.maxLineLength;
-        numberFieldPrefab_Left  = GameplayController.Instance.GameParameter.numberFieldPrefab_Left;
-        numberFieldPrefab_Right = GameplayController.Instance.GameParameter.numberFieldPrefab_Right;
+        maxLineLength           = ParameterManager.Instance.GameParameter.maxLineLength;
+        numberFieldPrefab_Left  = ParameterManager.Instance.GameParameter.numberFieldPrefab_Left;
+        numberFieldPrefab_Right = ParameterManager.Instance.GameParameter.numberFieldPrefab_Right;
 
         //Lists
         numberFieldComponents = new List<List<NumberComponent>>();
@@ -205,6 +205,11 @@ public class NumberField
         }
         //Adds new numberFields with the given numbers-string that is left
         AddNumberFields(leftNumbers);
+
+        if (leftNumbers != "")
+        {
+            GameplayController.Instance.addNumbersAudioClipObject.PlaySound();
+        }
     }
 
 
@@ -300,6 +305,9 @@ public class NumberField
             {
                 fieldSelectionB = _numberComponent;
             }
+
+            //Selection audio
+            GameplayController.Instance.selectionAudioClipObject.PlaySound();
         }
         else
         {
@@ -311,6 +319,9 @@ public class NumberField
             {
                 fieldSelectionB = null;
             }
+
+            //Deselection audio
+            GameplayController.Instance.deselectionAudioClipObject.PlaySound();
         }
 
         if (fieldSelectionA != null && fieldSelectionB != null)
@@ -461,6 +472,9 @@ public class NumberField
         fieldSelectionA.FieldStrike();
         fieldSelectionB.FieldStrike();
 
+        //Strike field audio
+        GameplayController.Instance.strikeFieldAudioClipObject.PlaySound();
+
         //Checks if a row is allowed to get striked completly
         bool strikeA = false;
         bool strikeB = false;
@@ -568,6 +582,9 @@ public class NumberField
         {
             components[i].gameObject.SetActive(_status);
         }
+
+        //Strike line audio
+        GameplayController.Instance.strikeLineAudioClipObject.PlaySound();
     }
 
 
@@ -640,6 +657,9 @@ public class NumberField
 
             numA.SetHintStatus(true);
             numB.SetHintStatus(true);
+
+            //Hint audio
+            GameplayController.Instance.hintAudioClipObject.PlaySound();
         }
     }
 

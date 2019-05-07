@@ -3,7 +3,7 @@ using System;
 
 
 [Serializable]
-public struct AudioObject
+public struct AudioClipInformation
 {
     public AudioClip audioClip;
     public float volume;

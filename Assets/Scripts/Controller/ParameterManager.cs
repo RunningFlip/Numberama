@@ -6,14 +6,23 @@ public class ParameterManager : MonoBehaviour
     //Singelton
     public static ParameterManager Instance;
 
-    //Parameter Configs
+
     public GameParameter GameParameter;
     public AudioParameter AudioParameter;
 
 
     private void Awake()
     {
-        Instance = this;
+        //Singelton
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         DontDestroyOnLoad(this);
     }
 }

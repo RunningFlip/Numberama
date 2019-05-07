@@ -65,6 +65,8 @@ public class MainMenuController : MonoBehaviour
         gameModeDropDown.AddOptions(new List<Dropdown.OptionData>() { new Dropdown.OptionData("Normal"), new Dropdown.OptionData("Hardmode") });
         startNewGameButton.interactable = false;
 
+        //Settings setup
+        SettingsController.PlayerPrefSetup();
 
         //DEBUG - resets the savegames
         //DataHelper.DeleteAllSavegames();

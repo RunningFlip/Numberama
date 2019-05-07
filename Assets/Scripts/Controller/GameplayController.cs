@@ -7,9 +7,6 @@ public class GameplayController : MonoBehaviour
     public static GameplayController Instance;
 
 
-    [Header("Game Parameter")]
-    public GameParameter GameParameter;
-
     [Header("UI Controller")]
     public UIController uiController;
 
@@ -23,11 +20,20 @@ public class GameplayController : MonoBehaviour
     //Time
     public float passedTime;
 
+    //Audio
+    [HideInInspector] public AudioClipObject selectionAudioClipObject;
+    [HideInInspector] public AudioClipObject deselectionAudioClipObject;
+    [HideInInspector] public AudioClipObject strikeFieldAudioClipObject;
+    [HideInInspector] public AudioClipObject strikeLineAudioClipObject;
+    [HideInInspector] public AudioClipObject addNumbersAudioClipObject;
+    [HideInInspector] public AudioClipObject hintAudioClipObject;
+    [HideInInspector] public AudioClipObject undoAudioClipObject;
+
 
     private void Awake()
     {
         //Singelton init
-        if (!Instance)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -42,8 +48,8 @@ public class GameplayController : MonoBehaviour
 
         //PatternConfig
         NumberPatternConfig patternConfig = gameMode == 0
-            ? GameParameter.defaultNumberPatternConfig
-            : GameParameter.hardNumberPatternConfig;
+            ? ParameterManager.Instance.GameParameter.defaultNumberPatternConfig
+            : ParameterManager.Instance.GameParameter.hardNumberPatternConfig;
 
         //Number Field
         if (savegameTimestamp != -1)
@@ -58,12 +64,33 @@ public class GameplayController : MonoBehaviour
             //Creates a numberfield with non savegame
             numberField = new NumberField(spawnParent, patternConfig, null);
         }
+
+        //Audio
+        AudioSetup();
     }
 
 
     private void LateUpdate()
     {
         passedTime += Time.deltaTime;
+    }
+
+
+    /// <summary>
+    /// Setups the audio that can be played.
+    /// </summary>
+    private void AudioSetup()
+    {
+        if (PlayerPrefs.GetInt("soundEffectsEnabled") == 1)
+        {
+            selectionAudioClipObject    = new AudioClipObject(ParameterManager.Instance.AudioParameter.selectionClip);
+            deselectionAudioClipObject  = new AudioClipObject(ParameterManager.Instance.AudioParameter.deselectionClip);
+            strikeFieldAudioClipObject  = new AudioClipObject(ParameterManager.Instance.AudioParameter.strikeFieldClip);
+            strikeLineAudioClipObject   = new AudioClipObject(ParameterManager.Instance.AudioParameter.strikeLineClip);
+            addNumbersAudioClipObject   = new AudioClipObject(ParameterManager.Instance.AudioParameter.addNumbersClip);
+            hintAudioClipObject         = new AudioClipObject(ParameterManager.Instance.AudioParameter.hintClip);
+            undoAudioClipObject         = new AudioClipObject(ParameterManager.Instance.AudioParameter.undoClip);
+        }
     }
 
 

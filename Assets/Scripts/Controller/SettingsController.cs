@@ -28,12 +28,11 @@ public class SettingsController : MonoBehaviour
         darkModeToggle.onValueChanged.AddListener(          delegate { ToggleDarkMode();            });
 
         //Settings setup
-        PlayerPrefsInit();
         SettingsSetup();
     }
 
 
-    private void PlayerPrefsInit()
+    public static void PlayerPrefSetup()
     {
         int init = PlayerPrefs.GetInt("playerPrefsInit");
 

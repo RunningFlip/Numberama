@@ -46,7 +46,7 @@ public static class DataHelper
         Savegame savegame = GetSavegame();
 
         string jsonString = JsonUtility.ToJson(savegame);
-        string dataPath = Path.Combine(Application.persistentDataPath, "Savegame_" + savegame.timestamp + ".txt");
+        string dataPath = Path.Combine(Application.persistentDataPath, "savegame_" + savegame.timestamp + ".txt");
 
         using (StreamWriter streamWriter = File.CreateText(dataPath))
         {
@@ -64,7 +64,7 @@ public static class DataHelper
     public static Savegame LoadProgress(int _savegameTimestamp)
     {
         Savegame loadedSavegame = null;
-        string dataPath = Path.Combine(Application.persistentDataPath, "Savegame_" + _savegameTimestamp + ".txt");
+        string dataPath = Path.Combine(Application.persistentDataPath, "savegame_" + _savegameTimestamp + ".txt");
 
         if (File.Exists(dataPath))
         {
@@ -85,7 +85,7 @@ public static class DataHelper
     /// <param name="_savegameTimestamp"></param>
     public static void DeleteSavegame(int _savegameTimestamp)
     {
-        string dataPath = Path.Combine(Application.persistentDataPath, "Savegame_" + _savegameTimestamp + ".txt"); ;
+        string dataPath = Path.Combine(Application.persistentDataPath, "savegame_" + _savegameTimestamp + ".txt"); ;
 
         if (File.Exists(dataPath))
         {
