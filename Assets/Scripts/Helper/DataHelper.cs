@@ -51,6 +51,7 @@ public static class DataHelper
         using (StreamWriter streamWriter = File.CreateText(dataPath))
         {
             streamWriter.Write(jsonString);
+            streamWriter.Close();
         }
     }
 
@@ -71,6 +72,7 @@ public static class DataHelper
             {
                 string jsonString = streamReader.ReadToEnd();
                 loadedSavegame = JsonUtility.FromJson<Savegame>(jsonString);
+                streamReader.Close();
             }
         }
         return loadedSavegame;
@@ -111,6 +113,7 @@ public static class DataHelper
             {
                 string jsonString = streamReader.ReadToEnd();
                 savegames.Add(JsonUtility.FromJson<Savegame>(jsonString));
+                streamReader.Close();
             }
         }
 

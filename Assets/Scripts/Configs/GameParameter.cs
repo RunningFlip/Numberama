@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "GameParameter", menuName = "Parameter")]
+[CreateAssetMenu(fileName = "GameParameter", menuName = "Parameter/Game Parameter")]
 public class GameParameter : ScriptableObject
 {
     [Header("General")]

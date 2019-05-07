@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d80199146ce76149b249eed4a863b06, type: 3}
+  m_Name: AudioParameter
+  m_EditorClassIdentifier: 
+  easeSpeed: 1
+  introEaseTime: 1
+  defaultButtonClip:
+    audioClip: {fileID: 0}
+    volume: 0
+  defaultToggleClip:
+    audioClip: {fileID: 0}
+    volume: 0
+  defaultInputFieldClip:
+    audioClip: {fileID: 0}
+    volume: 0
+  menuMusic:
+    audioClip: {fileID: 0}
+    volume: 0
+  inGameMusic:
+    audioClip: {fileID: 0}
+    volume: 0
+  selectionClip:
+    audioClip: {fileID: 0}
+    volume: 0
+  deselectionClip:
+    audioClip: {fileID: 0}
+    volume: 0
+  strikeClip:
+    audioClip: {fileID: 0}
+    volume: 0
+  hintClip:
+    audioClip: {fileID: 8300000, guid: e9dbab43ab46ac644aaa3b98313045d4, type: 3}
+    volume: 1
+  undoClip:
+    audioClip: {fileID: 0}
+    volume: 0
