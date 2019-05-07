@@ -68,6 +68,9 @@ public class MainMenuController : MonoBehaviour
         //Settings setup
         SettingsController.PlayerPrefSetup();
 
+        //Audio
+        MusicController.Instance.SetMusicType(MusicType.Menu);
+
         //DEBUG - resets the savegames
         //DataHelper.DeleteAllSavegames();
         //PlayerPrefs.DeleteAll();

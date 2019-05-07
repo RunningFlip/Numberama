@@ -63,12 +63,12 @@ public class MusicController : MonoBehaviour
             switch (musicType)
             {
                 case MusicType.Menu:
-                    audioClip = ParameterManager.Instance.AudioParameter.menuMusic.audioClip;
+                    audioClip   = ParameterManager.Instance.AudioParameter.menuMusic.audioClip;
                     musicVolume = ParameterManager.Instance.AudioParameter.menuMusic.volume;
                     break;
 
                 case MusicType.InGame:
-                    audioClip = ParameterManager.Instance.AudioParameter.inGameMusic.audioClip;
+                    audioClip   = ParameterManager.Instance.AudioParameter.inGameMusic.audioClip;
                     musicVolume = ParameterManager.Instance.AudioParameter.inGameMusic.volume;
                     break;
             }

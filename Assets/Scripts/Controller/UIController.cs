@@ -28,10 +28,10 @@ public class UIController : MonoBehaviour
         gridLayoutGroup.constraintCount = ParameterManager.Instance.GameParameter.maxLineLength;
 
         //Listeners
-        menuButton.onClick.AddListener(                 delegate { StartCoroutine(BackToGameMenu());                    });
-        moreFieldsButton.onClick.AddListener(           delegate { GameplayController.Instance.TrySpawnMoreNumbers();   });
-        undoStrikeButton.onClick.AddListener(           delegate { GameplayController.Instance.UndoLastAction();        });
-        hintButton.onClick.AddListener(                 delegate { GameplayController.Instance.ShowNextHint();          });
+        menuButton.onClick.AddListener(         delegate { StartCoroutine(BackToGameMenu());                    });
+        moreFieldsButton.onClick.AddListener(   delegate { GameplayController.Instance.TrySpawnMoreNumbers();   });
+        undoStrikeButton.onClick.AddListener(   delegate { GameplayController.Instance.UndoLastAction();        });
+        hintButton.onClick.AddListener(         delegate { GameplayController.Instance.ShowNextHint();          });
 
         //Settings
         ApplySettings();
@@ -82,7 +82,7 @@ public class UIController : MonoBehaviour
         }
 
         //Load game menu
-        SceneManager.LoadScene("SavegameMenuScene");   
+        SceneManager.LoadScene("MainMenuScene");   
     }
 
 

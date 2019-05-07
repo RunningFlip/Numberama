@@ -66,6 +66,7 @@ public class GameplayController : MonoBehaviour
         }
 
         //Audio
+        MusicController.Instance.SetMusicType(MusicType.InGame);
         AudioSetup();
     }
 
