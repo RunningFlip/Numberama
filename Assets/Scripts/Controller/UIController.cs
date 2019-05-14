@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+    [Header("Canvas")]
+    public GameObject canvasObject;
+
     [Header("Layout")]
     public GridLayoutGroup gridLayoutGroup;
 
@@ -28,7 +31,7 @@ public class UIController : MonoBehaviour
         gridLayoutGroup.constraintCount = ParameterManager.Instance.GameParameter.maxLineLength;
 
         //Listeners
-        menuButton.onClick.AddListener(         delegate { StartCoroutine(BackToGameMenu());                    });
+        menuButton.onClick.AddListener(         delegate { BackToGameMenu();                                    });
         moreFieldsButton.onClick.AddListener(   delegate { GameplayController.Instance.TrySpawnMoreNumbers();   });
         undoStrikeButton.onClick.AddListener(   delegate { GameplayController.Instance.UndoLastAction();        });
         hintButton.onClick.AddListener(         delegate { GameplayController.Instance.ShowNextHint();          });
@@ -69,20 +72,49 @@ public class UIController : MonoBehaviour
     /// <summary>
     /// Loads the mainMenu.
     /// </summary>
-    private IEnumerator BackToGameMenu()
+    private async void BackToGameMenu()
     {
-        //Remove listener from button
-        menuButton.onClick.RemoveListener(delegate { StartCoroutine(BackToGameMenu()); });
+        //Creates a loadingscreen object
+        LoadingHelper.ShowLoadingScreen(canvasObject.transform);
 
-        //Save game
-        if (NumberField.Instance.IsDirty())
+        //Remove listener from button
+        menuButton.onClick.RemoveListener(delegate { BackToGameMenu(); });
+
+        //Check if the game is finished
+        if (NumberField.Instance.IsFinished())
         {
-            yield return new WaitForEndOfFrame();
-            DataHelper.SaveProgress();
+            //Delete old savegame
+            DataHelper.DeleteSavegame(PlayerPrefs.GetInt("SavegameTimestamp"));
+        }
+        else
+        {
+            //Save game
+            if (NumberField.Instance.IsDirty())
+            {
+                await DataHelper.SaveProgress();
+            }
         }
 
         //Load game menu
-        SceneManager.LoadScene("MainMenuScene");   
+        SceneManager.LoadSceneAsync("MainMenuScene");   
+    }
+
+
+    /// <summary>
+    /// Saves the current progress of the game.
+    /// </summary>
+    private async void SaveProgress()
+    {
+        Savegame savegame = null;
+
+        string jsonString = JsonUtility.ToJson(savegame);
+        string dataPath = Path.Combine(Application.persistentDataPath, "savegame_" + savegame.timestamp + ".txt");
+
+        using (StreamWriter streamWriter = File.CreateText(dataPath))
+        {
+            await streamWriter.WriteAsync(jsonString);
+            streamWriter.Close();
+        }
     }
 
 

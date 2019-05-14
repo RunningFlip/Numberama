@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class SavegameMenuController : MonoBehaviour
 {
+    [Header("Canvas")]
+    public GameObject canvasObject;
+
     [Header("Buttons")]
     public Button loadMainMenuButton;
     public Button editSavegamesButton;
@@ -26,8 +29,8 @@ public class SavegameMenuController : MonoBehaviour
     private void Start()
     {
         //Buttons
-        loadMainMenuButton.onClick.AddListener(     delegate { SceneManager.LoadScene("MainMenuScene"); });
-        editSavegamesButton.onClick.AddListener(    delegate { ToggleEditing();                         });
+        loadMainMenuButton.onClick.AddListener(     delegate { StartCoroutine(LoadingHelper.LoadSceneAsync(canvasObject, "MainmenuScene")); });
+        editSavegamesButton.onClick.AddListener(    delegate { ToggleEditing();                                             });
 
         //Savegames
         savegameButtons = new List<SavegameButton>();
@@ -53,14 +56,28 @@ public class SavegameMenuController : MonoBehaviour
     /// Loads the game scene with/without savegame.
     /// </summary>
     /// <param name="_savegame"></param>
-    private void LoadGame(SavegameInformation _savegameInformation)
+    private IEnumerator<object> LoadGame(SavegameInformation _savegameInformation)
     {
+        //Creates a loadingscreen object
+        LoadingHelper.ShowLoadingScreen(canvasObject.transform);
+
+        //Setting prefs
         PlayerPrefs.SetInt("SavegameTimestamp", _savegameInformation.timestamp);
         PlayerPrefs.SetString("SavegameName", _savegameInformation.gameName);
         PlayerPrefs.SetInt("SavegameMode", _savegameInformation.gameMode);
         PlayerPrefs.Save();
 
-        SceneManager.LoadScene("MainGameScene");
+        //Loads the game
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("MainGameScene");
+
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+
+        //Destroys the loadingscreen object
+        LoadingHelper.RemoveLoadingScreen();
     }
 
 
@@ -68,15 +85,15 @@ public class SavegameMenuController : MonoBehaviour
     /// Adds a savegamebutton on a given index.
     /// </summary>
     /// <param name="_index"></param>
-    public void AddSavegameButton(SavegameInformation _savgameInformation)
+    public void AddSavegameButton(SavegameInformation _savegameInformation)
     {
         GameObject buttonObject = Instantiate(savegameButtonPrefab, Vector3.zero, Quaternion.identity, savegameParent);
 
         SavegameButton savegameButton = buttonObject.GetComponent<SavegameButton>();       
-        savegameButton.SetSavegameInformation(_savgameInformation); 
-        savegameButton.ButtonSetup(_savgameInformation.gameName, _savgameInformation.gameMode); 
+        savegameButton.SetSavegameInformation(_savegameInformation); 
+        savegameButton.ButtonSetup(_savegameInformation.gameName, _savegameInformation.gameMode); 
 
-        savegameButton.button.onClick.AddListener(delegate { LoadGame(_savgameInformation); });
+        savegameButton.button.onClick.AddListener(delegate { StartCoroutine(LoadGame(_savegameInformation)); });
 
         savegameButtons.Add(savegameButton);
     }
@@ -138,7 +155,7 @@ public class SavegameMenuController : MonoBehaviour
 
                 SavegameButton savegameButton = savegameButtons[i];
                 savegameButton.button.onClick.RemoveAllListeners();
-                savegameButton.button.onClick.AddListener(delegate { LoadGame(savegameInformation); });
+                savegameButton.button.onClick.AddListener(delegate { StartCoroutine(LoadGame(savegameInformation)); });
 
                 savegameButton.ToggleEditMode();
             }

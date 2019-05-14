@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6df5bb2946073034fbd92bde5836eb35, type: 3}
   m_Name: GameParameter
   m_EditorClassIdentifier: 
+  loadingScreenPrefab: {fileID: 8208269516338678095, guid: b406231b787644b459f8ddd9c0ce8426,
+    type: 3}
   maxLineLength: 9
   maxBackTracking: 10
   defaultNumberPatternConfig: {fileID: 11400000, guid: a698a1127da4b89479c4acea158764ee,
     type: 2}
   hardNumberPatternConfig: {fileID: 11400000, guid: 8faad2da1a5b525409a9566b39d9f94d,
     type: 2}
+  maxRandomPatternLength: 27
   numberFieldPrefab_Left: {fileID: 8023269684463369386, guid: b5c5b6aa308fb5e44829043654d3b1f6,
     type: 3}
   numberFieldPrefab_Right: {fileID: 8023269684463369386, guid: d0cf2ab14a06316478b840c0b0f4ebfe,

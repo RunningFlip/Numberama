@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 
 
-public class AudioClipObject
+public struct AudioClipObject
 {
     private AudioClipInformation audioClipInformation;
-    private Vector3 zeroVec = Vector3.zero;
+    private Vector3 zeroVec;
 
 
     public AudioClipObject(AudioClipInformation _audioClipInformation)
     {
         audioClipInformation = _audioClipInformation;
+        zeroVec = Vector3.zero;
     }
 
 

@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
 public class SettingsController : MonoBehaviour
 {
+    [Header("Panel")]
+    public GameObject mainMenuPanel;
+    public GameObject settingsPanel;
+
     [Header("Button")]
-    public Button loadMainMenuButton;
+    public Button backToMainMenuButton;
 
     [Header("Toggle")]
     public Toggle soundEffectsToggle;
@@ -19,7 +22,7 @@ public class SettingsController : MonoBehaviour
     private void Start()
     {
         //Button
-        loadMainMenuButton.onClick.AddListener(delegate { SceneManager.LoadScene("MainMenuScene"); });
+        backToMainMenuButton.onClick.AddListener(delegate { GoBackToMainMenu(); });
 
         //Toggle
         soundEffectsToggle.onValueChanged.AddListener(      delegate { ToggleSoundEffects();        });
@@ -32,11 +35,21 @@ public class SettingsController : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Toggles back to the main menu.
+    /// </summary>
+    private void GoBackToMainMenu()
+    {
+        settingsPanel.SetActive(false);
+        mainMenuPanel.SetActive(true);
+    }
+
+
     public static void PlayerPrefSetup()
     {
         int init = PlayerPrefs.GetInt("playerPrefsInit");
 
-        if (init == 0)
+        if (init != 1)
         {
             PlayerPrefs.SetInt("playerPrefsInit", 1);
 
@@ -53,10 +66,10 @@ public class SettingsController : MonoBehaviour
     private void SettingsSetup()
     {
         //Toggle UI
-        soundEffectsToggle.isOn         = PlayerPrefs.GetInt("soundEffectsEnabled") == 1;
-        hintsToggle.isOn                = PlayerPrefs.GetInt("hintsEnabled") == 1;
-        backtrackToggle.isOn            = PlayerPrefs.GetInt("backtrackingEnabled") == 1;
-        darkModeToggle.isOn             = PlayerPrefs.GetInt("darkmodeEnabled") == 1;
+        soundEffectsToggle.isOn     = PlayerPrefs.GetInt("soundEffectsEnabled") == 1;
+        hintsToggle.isOn            = PlayerPrefs.GetInt("hintsEnabled") == 1;
+        backtrackToggle.isOn        = PlayerPrefs.GetInt("backtrackingEnabled") == 1;
+        darkModeToggle.isOn         = PlayerPrefs.GetInt("darkmodeEnabled") == 1;
     }
 
 

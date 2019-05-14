@@ -1,12 +1,19 @@
 ﻿using UnityEngine;
 
+
 public class StartAnimationTrigger : MonoBehaviour
 {
-    public MainMenuController menuController;
-
+    [Header("Panels")]
+    public GameObject animationPanel;
+    public GameObject mainMenuPanel;
     
-    public void StartAnimation()
+
+    /// <summary>
+    /// Ends the animation and shows the original main menu.
+    /// </summary>
+    public void SwitchToMainMenu()
     {
-        menuController.MenuSetup();
+        animationPanel.SetActive(false);
+        mainMenuPanel.SetActive(true);
     }
 }

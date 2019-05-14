@@ -47,9 +47,22 @@ public class GameplayController : MonoBehaviour
         int savegameTimestamp = PlayerPrefs.GetInt("SavegameTimestamp");
 
         //PatternConfig
-        NumberPatternConfig patternConfig = gameMode == 0
-            ? ParameterManager.Instance.GameParameter.defaultNumberPatternConfig
-            : ParameterManager.Instance.GameParameter.hardNumberPatternConfig;
+        NumberPatternConfig patternConfig = null;
+
+        switch (gameMode)
+        {
+            case 0:
+                patternConfig = ParameterManager.Instance.GameParameter.defaultNumberPatternConfig;
+                break;
+
+            case 1:
+                patternConfig = ParameterManager.Instance.GameParameter.hardNumberPatternConfig;
+                break;
+
+            case 2:
+                patternConfig = CreateRandomPattern();
+                break;
+        }
 
         //Number Field
         if (savegameTimestamp != -1)
@@ -92,6 +105,25 @@ public class GameplayController : MonoBehaviour
             hintAudioClipObject         = new AudioClipObject(ParameterManager.Instance.AudioParameter.hintClip);
             undoAudioClipObject         = new AudioClipObject(ParameterManager.Instance.AudioParameter.undoClip);
         }
+    }
+
+
+    /// <summary>
+    /// Returns a random pattern config.
+    /// </summary>
+    /// <returns></returns>
+    private NumberPatternConfig CreateRandomPattern()
+    {
+        string rdmPattern = "";
+
+        for (int i = 0; i < ParameterManager.Instance.GameParameter.maxRandomPatternLength; i++)
+        {
+            rdmPattern += Random.Range(1, 10);
+        }
+        NumberPatternConfig patternConfig = new NumberPatternConfig();
+        patternConfig.numberStartPattern = rdmPattern;
+
+        return patternConfig;
     }
 
 

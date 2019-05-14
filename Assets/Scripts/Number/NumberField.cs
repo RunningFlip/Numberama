@@ -18,6 +18,7 @@ public class NumberField
     private NumberComponent lastHintB;
 
     //Flag
+    private bool isFinished;
     private bool right;
     private bool started;
     private bool isDirty;
@@ -97,6 +98,7 @@ public class NumberField
     public int GetUndoCount()           { return undoCount;         }
 
     public bool IsDirty()               { return isDirty;           }
+    public bool IsFinished()            { return isFinished;        }
 
     public NumberComponent GetNumberComponent(int _x, int _y) { return numberFieldComponents[_y][_x]; }
     //GETTER---------------------------------------------------------------
@@ -185,10 +187,36 @@ public class NumberField
 
 
     /// <summary>
+    /// Returns true if not striked numbers are left.
+    /// </summary>
+    /// <returns></returns>
+    private bool NumbersLeft()
+    {
+        bool numbersLeft = false;
+
+        for (int i = 0; i < numberFieldComponents.Count; i++)
+        {
+            for (int j = 0; j < numberFieldComponents[i].Count; j++)
+            {
+                NumberComponent component = numberFieldComponents[i][j];
+                if (!component.strike)
+                {
+                    numbersLeft = true;
+                    return numbersLeft;
+                }
+            }
+        }
+        return numbersLeft;
+    }
+
+
+    /// <summary>
     /// Spawns the left fields as an extension.
     /// </summary>
     public void TrySpawnMoreNumbers()
     {
+        if (isFinished) return;
+
         string leftNumbers = "";
 
         //Creates a string out of the left numbers on the gamefield
@@ -203,6 +231,7 @@ public class NumberField
                 }
             }
         }
+
         //Adds new numberFields with the given numbers-string that is left
         AddNumberFields(leftNumbers);
 
@@ -507,6 +536,9 @@ public class NumberField
 
         //Update Strikes pairs in the UI
         IncreasePairByInt(1);
+
+        //Checks if the game is finished
+        isFinished = !NumbersLeft();
     }
 
 
@@ -593,6 +625,8 @@ public class NumberField
     /// </summary>
     public void UndoLastAction()
     {
+        if (isFinished) return;
+
         if (backLog.IsEmpty()) ResetHint();
 
         backLog.UndoLastAction();
@@ -604,6 +638,8 @@ public class NumberField
     /// </summary>
     public void ShowNextHint()
     {
+        if (isFinished) return;
+
         bool pairFound = false;
 
         int x = 0;

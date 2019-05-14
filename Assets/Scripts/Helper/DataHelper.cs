@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -41,7 +42,7 @@ public static class DataHelper
     /// Saves the progress from the current game on the given savegame-index.
     /// </summary>
     /// <param name="_savegameIndex"></param>
-    public static void SaveProgress()
+    public static async Task SaveProgress()
     {
         Savegame savegame = GetSavegame();
 
@@ -50,7 +51,7 @@ public static class DataHelper
 
         using (StreamWriter streamWriter = File.CreateText(dataPath))
         {
-            streamWriter.Write(jsonString);
+            await streamWriter.WriteAsync(jsonString);
             streamWriter.Close();
         }
     }
